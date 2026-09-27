@@ -2,6 +2,12 @@ package com.petcaremax.view;
 
 import com.petcaremax.service.DashboardService;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -9,10 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
+import javax.swing.table.DefaultTableModel;
 
 public class DashboardPanel extends JPanel {
 
@@ -23,6 +26,8 @@ public class DashboardPanel extends JPanel {
     private JLabel lblAppointmentCount;
     private JLabel lblRevenue;
     private JLabel lblLoading;
+
+    private JTable appointmentTable;
 
     public DashboardPanel() {
 
@@ -239,29 +244,46 @@ public class DashboardPanel extends JPanel {
                 BorderLayout.NORTH
         );
 
-        // --------------------------------------------------------
+        // ========================================================
         // TABLE
-        // --------------------------------------------------------
+        // ========================================================
 
         String[] columnNames = {
-            "Customer",
-            "Pet",
-            "Veterinarian",
-            "Date",
-            "Status"
+                "Customer",
+                "Pet",
+                "Veterinarian",
+                "Date",
+                "Status"
         };
 
-        Object[][] tableData = {
-            {"-", "-", "-", "-", "-"},
-            {"-", "-", "-", "-", "-"},
-            {"-", "-", "-", "-", "-"}
-        };
+        /*
+         * IMPORTANT:
+         * Use DefaultTableModel explicitly.
+         * This prevents ClassCastException when we update
+         * the table after loading database data.
+         */
 
-        JTable appointmentTable =
-                new JTable(
-                        tableData,
+        DefaultTableModel tableModel =
+                new DefaultTableModel(
+                        new Object[][]{
+                                {"-", "-", "-", "-", "-"},
+                                {"-", "-", "-", "-", "-"},
+                                {"-", "-", "-", "-", "-"}
+                        },
                         columnNames
-                );
+                ) {
+
+                    @Override
+                    public boolean isCellEditable(
+                            int row,
+                            int column
+                    ) {
+                        return false;
+                    }
+                };
+
+        appointmentTable =
+                new JTable(tableModel);
 
         appointmentTable.setRowHeight(32);
 
@@ -282,6 +304,8 @@ public class DashboardPanel extends JPanel {
                         )
                 );
 
+        appointmentTable.setAutoCreateRowSorter(true);
+
         JScrollPane scrollPane =
                 new JScrollPane(
                         appointmentTable
@@ -292,9 +316,9 @@ public class DashboardPanel extends JPanel {
                 BorderLayout.CENTER
         );
 
-        // --------------------------------------------------------
+        // ========================================================
         // LOADING LABEL
-        // --------------------------------------------------------
+        // ========================================================
 
         lblLoading =
                 new JLabel(
@@ -430,6 +454,10 @@ public class DashboardPanel extends JPanel {
                     protected DashboardData doInBackground()
                             throws Exception {
 
+                        // ----------------------------------------
+                        // Load dashboard statistics
+                        // ----------------------------------------
+
                         int customers =
                                 dashboardService
                                         .getCustomerCount();
@@ -446,11 +474,20 @@ public class DashboardPanel extends JPanel {
                                 dashboardService
                                         .getRevenue();
 
+                        // ----------------------------------------
+                        // Load recent appointments
+                        // ----------------------------------------
+
+                        List<Object[]> recentAppointments =
+                                dashboardService
+                                        .getRecentAppointments();
+
                         return new DashboardData(
                                 customers,
                                 pets,
                                 appointments,
-                                revenue
+                                revenue,
+                                recentAppointments
                         );
                     }
 
@@ -461,6 +498,10 @@ public class DashboardPanel extends JPanel {
 
                             DashboardData data =
                                     get();
+
+                            // ====================================
+                            // STATISTICS
+                            // ====================================
 
                             lblCustomerCount.setText(
                                     String.valueOf(
@@ -487,11 +528,56 @@ public class DashboardPanel extends JPanel {
                                     )
                             );
 
+                            // ====================================
+                            // RECENT APPOINTMENTS
+                            // ====================================
+
+                            DefaultTableModel model =
+                                    (DefaultTableModel)
+                                            appointmentTable
+                                                    .getModel();
+
+                            model.setRowCount(0);
+
+                            if (
+                                    data.recentAppointments != null
+                                    && !data.recentAppointments.isEmpty()
+                            ) {
+
+                                for (
+                                        Object[] appointment
+                                        : data.recentAppointments
+                                ) {
+
+                                    model.addRow(
+                                            appointment
+                                    );
+                                }
+
+                            } else {
+
+                                model.addRow(
+                                        new Object[]{
+                                                "-",
+                                                "-",
+                                                "-",
+                                                "-",
+                                                "-"
+                                        }
+                                );
+                            }
+
                             lblLoading.setText(
                                     "Dashboard data loaded successfully."
                             );
 
                         } catch (Exception e) {
+
+                            e.printStackTrace();
+
+                            // ====================================
+                            // ERROR VALUES
+                            // ====================================
 
                             lblCustomerCount.setText("0");
 
@@ -503,11 +589,30 @@ public class DashboardPanel extends JPanel {
                                     "Rs. 0.00"
                             );
 
+                            // ====================================
+                            // ERROR TABLE
+                            // ====================================
+
+                            DefaultTableModel model =
+                                    (DefaultTableModel)
+                                            appointmentTable
+                                                    .getModel();
+
+                            model.setRowCount(0);
+
+                            model.addRow(
+                                    new Object[]{
+                                            "-",
+                                            "-",
+                                            "-",
+                                            "-",
+                                            "-"
+                                    }
+                            );
+
                             lblLoading.setText(
                                     "Unable to load dashboard data."
                             );
-
-                            e.printStackTrace();
                         }
                     }
                 };
@@ -526,20 +631,30 @@ public class DashboardPanel extends JPanel {
         private final int appointments;
         private final double revenue;
 
+        private final List<Object[]> recentAppointments;
+
         public DashboardData(
                 int customers,
                 int pets,
                 int appointments,
-                double revenue
+                double revenue,
+                List<Object[]> recentAppointments
         ) {
 
-            this.customers = customers;
+            this.customers =
+                    customers;
 
-            this.pets = pets;
+            this.pets =
+                    pets;
 
-            this.appointments = appointments;
+            this.appointments =
+                    appointments;
 
-            this.revenue = revenue;
+            this.revenue =
+                    revenue;
+
+            this.recentAppointments =
+                    recentAppointments;
         }
     }
 }

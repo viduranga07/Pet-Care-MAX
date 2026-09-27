@@ -6,8 +6,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,8 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 public class MainFrame extends JFrame {
+
+    // ============================================================
+    // COLORS
+    // ============================================================
 
     private static final Color SIDEBAR_COLOR =
             new Color(24, 31, 43);
@@ -28,7 +33,7 @@ public class MainFrame extends JFrame {
             new Color(245, 190, 55);
 
     private static final Color TEXT_COLOR =
-            new Color(240, 243, 247);
+            Color.WHITE;
 
     private static final Color MUTED_COLOR =
             new Color(170, 180, 195);
@@ -36,11 +41,25 @@ public class MainFrame extends JFrame {
     private static final Color CONTENT_COLOR =
             new Color(245, 247, 250);
 
+    private static final Color BUTTON_HOVER_COLOR =
+            new Color(38, 48, 65);
+
+    private static final Color BUTTON_SELECTED_COLOR =
+            new Color(55, 69, 90);
+
+    // ============================================================
+    // MAIN COMPONENTS
+    // ============================================================
+
     private JPanel sidebarPanel;
     private JPanel contentPanel;
     private JPanel contentCards;
 
     private CardLayout cardLayout;
+
+    // ============================================================
+    // NAVIGATION BUTTONS
+    // ============================================================
 
     private JButton btnDashboard;
     private JButton btnCustomers;
@@ -52,6 +71,10 @@ public class MainFrame extends JFrame {
     private JButton btnPayments;
     private JButton btnReports;
     private JButton btnLogout;
+
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
 
     public MainFrame() {
 
@@ -76,6 +99,10 @@ public class MainFrame extends JFrame {
 
         initializeUI();
     }
+
+    // ============================================================
+    // INITIALIZE UI
+    // ============================================================
 
     private void initializeUI() {
 
@@ -107,6 +134,10 @@ public class MainFrame extends JFrame {
         showPage("DASHBOARD");
     }
 
+    // ============================================================
+    // SIDEBAR
+    // ============================================================
+
     private void createSidebar() {
 
         sidebarPanel =
@@ -122,7 +153,10 @@ public class MainFrame extends JFrame {
                 SIDEBAR_COLOR
         );
 
-        // Logo
+        // ========================================================
+        // LOGO
+        // ========================================================
+
         JPanel logoPanel =
                 new JPanel(
                         new BorderLayout()
@@ -208,9 +242,9 @@ public class MainFrame extends JFrame {
         logoContainer.setOpaque(false);
 
         logoContainer.setLayout(
-                new BoxLayout(
+                new javax.swing.BoxLayout(
                         logoContainer,
-                        BoxLayout.Y_AXIS
+                        javax.swing.BoxLayout.Y_AXIS
                 )
         );
 
@@ -227,7 +261,10 @@ public class MainFrame extends JFrame {
                 BorderLayout.NORTH
         );
 
-        // Navigation
+        // ========================================================
+        // NAVIGATION
+        // ========================================================
+
         JPanel navigationPanel =
                 new JPanel();
 
@@ -243,9 +280,9 @@ public class MainFrame extends JFrame {
         );
 
         navigationPanel.setLayout(
-                new BoxLayout(
+                new javax.swing.BoxLayout(
                         navigationPanel,
-                        BoxLayout.Y_AXIS
+                        javax.swing.BoxLayout.Y_AXIS
                 )
         );
 
@@ -285,6 +322,10 @@ public class MainFrame extends JFrame {
         navigationPanel.add(btnTreatments);
         navigationPanel.add(btnPayments);
         navigationPanel.add(btnReports);
+
+        // ========================================================
+        // BUTTON ACTIONS
+        // ========================================================
 
         btnDashboard.addActionListener(
                 e -> showPage("DASHBOARD")
@@ -327,7 +368,10 @@ public class MainFrame extends JFrame {
                 BorderLayout.CENTER
         );
 
-        // Logout
+        // ========================================================
+        // LOGOUT
+        // ========================================================
+
         JPanel logoutPanel =
                 new JPanel(
                         new BorderLayout()
@@ -347,22 +391,26 @@ public class MainFrame extends JFrame {
         btnLogout =
                 createMenuButton("Logout");
 
-        btnLogout.addActionListener(e -> {
+        btnLogout.addActionListener(
+                e -> {
 
-            int result =
-                    JOptionPane.showConfirmDialog(
-                            this,
-                            "Are you sure you want to logout?",
-                            "Logout",
-                            JOptionPane.YES_NO_OPTION
-                    );
+                    int result =
+                            JOptionPane.showConfirmDialog(
+                                    this,
+                                    "Are you sure you want to logout?",
+                                    "Logout",
+                                    JOptionPane.YES_NO_OPTION
+                            );
 
-            if (result ==
-                    JOptionPane.YES_OPTION) {
+                    if (
+                            result ==
+                            JOptionPane.YES_OPTION
+                    ) {
 
-                dispose();
-            }
-        });
+                        dispose();
+                    }
+                }
+        );
 
         logoutPanel.add(
                 btnLogout,
@@ -375,6 +423,10 @@ public class MainFrame extends JFrame {
         );
     }
 
+    // ============================================================
+    // CONTENT AREA
+    // ============================================================
+
     private void createContentArea() {
 
         contentPanel =
@@ -386,11 +438,13 @@ public class MainFrame extends JFrame {
                 CONTENT_COLOR
         );
 
+        // Header
         contentPanel.add(
                 createHeader(),
                 BorderLayout.NORTH
         );
 
+        // CardLayout
         cardLayout =
                 new CardLayout();
 
@@ -403,66 +457,98 @@ public class MainFrame extends JFrame {
                 CONTENT_COLOR
         );
 
-        // Real Dashboard
+        // ========================================================
+        // DASHBOARD
+        // ========================================================
+
         contentCards.add(
                 new DashboardPanel(),
                 "DASHBOARD"
         );
 
-        // Temporary pages
+        // ========================================================
+        // CUSTOMER
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Customer Management"
+                createEmbeddedPage(
+                        new CustomerForm()
                 ),
                 "CUSTOMERS"
         );
 
+        // ========================================================
+        // PET
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Pet Management"
+                createEmbeddedPage(
+                        new PetForm()
                 ),
                 "PETS"
         );
 
+        // ========================================================
+        // VETERINARIAN
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Veterinarian Management"
+                createEmbeddedPage(
+                        new VeterinarianForm()
                 ),
                 "VETERINARIANS"
         );
 
+        // ========================================================
+        // SERVICE
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Service Management"
+                createEmbeddedPage(
+                        new ServiceForm()
                 ),
                 "SERVICES"
         );
 
+        // ========================================================
+        // APPOINTMENT
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Appointment Management"
+                createEmbeddedPage(
+                        new AppointmentForm()
                 ),
                 "APPOINTMENTS"
         );
 
+        // ========================================================
+        // TREATMENT
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Treatment Management"
+                createEmbeddedPage(
+                        new TreatmentForm()
                 ),
                 "TREATMENTS"
         );
 
+        // ========================================================
+        // PAYMENT
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Payment Management"
+                createEmbeddedPage(
+                        new PaymentForm()
                 ),
                 "PAYMENTS"
         );
 
+        // ========================================================
+        // REPORTS
+        // ========================================================
+
         contentCards.add(
-                createPlaceholderPanel(
-                        "Reports"
-                ),
+                createReportsPage(),
                 "REPORTS"
         );
 
@@ -472,6 +558,123 @@ public class MainFrame extends JFrame {
         );
     }
 
+    // ============================================================
+    // EMBED JFrame FORM INTO MAINFRAME
+    // ============================================================
+
+    private JPanel createEmbeddedPage(
+            JFrame form
+    ) {
+
+        JPanel page =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        page.setBackground(
+                CONTENT_COLOR
+        );
+
+        /*
+         * The existing forms are JFrame objects.
+         * We reuse their existing content pane
+         * inside the MainFrame CardLayout.
+         */
+
+        JPanel formContent =
+                (JPanel) form.getContentPane();
+
+        page.add(
+                formContent,
+                BorderLayout.CENTER
+        );
+
+        return page;
+    }
+
+    // ============================================================
+    // REPORTS PAGE
+    // ============================================================
+
+    private JPanel createReportsPage() {
+
+        JPanel page =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        page.setBackground(
+                CONTENT_COLOR
+        );
+
+        page.setBorder(
+                new EmptyBorder(
+                        30,
+                        30,
+                        30,
+                        30
+                )
+        );
+
+        JLabel title =
+                new JLabel(
+                        "Reports"
+                );
+
+        title.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        28
+                )
+        );
+
+        title.setForeground(
+                new Color(
+                        35,
+                        40,
+                        50
+                )
+        );
+
+        page.add(
+                title,
+                BorderLayout.NORTH
+        );
+
+        JLabel message =
+                new JLabel(
+                        "Jasper Reports will be available here."
+                );
+
+        message.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        15
+                )
+        );
+
+        message.setForeground(
+                new Color(
+                        100,
+                        110,
+                        125
+                )
+        );
+
+        page.add(
+                message,
+                BorderLayout.CENTER
+        );
+
+        return page;
+    }
+
+    // ============================================================
+    // HEADER
+    // ============================================================
+
     private JPanel createHeader() {
 
         JPanel header =
@@ -480,7 +683,10 @@ public class MainFrame extends JFrame {
                 );
 
         header.setPreferredSize(
-                new Dimension(0, 75)
+                new Dimension(
+                        0,
+                        75
+                )
         );
 
         header.setBackground(
@@ -502,14 +708,16 @@ public class MainFrame extends JFrame {
         titlePanel.setOpaque(false);
 
         titlePanel.setLayout(
-                new BoxLayout(
+                new javax.swing.BoxLayout(
                         titlePanel,
-                        BoxLayout.Y_AXIS
+                        javax.swing.BoxLayout.Y_AXIS
                 )
         );
 
         JLabel lblTitle =
-                new JLabel("PetCareMAX");
+                new JLabel(
+                        "PetCareMAX"
+                );
 
         lblTitle.setFont(
                 new Font(
@@ -549,7 +757,9 @@ public class MainFrame extends JFrame {
         );
 
         JLabel lblUser =
-                new JLabel("Admin  ●");
+                new JLabel(
+                        "Admin  ●"
+                );
 
         lblUser.setFont(
                 new Font(
@@ -571,12 +781,25 @@ public class MainFrame extends JFrame {
         return header;
     }
 
+    // ============================================================
+    // MENU BUTTON
+    // ============================================================
+
     private JButton createMenuButton(
             String text
     ) {
 
         JButton button =
                 new JButton(text);
+
+        /*
+         * BasicButtonUI prevents Windows Look & Feel
+         * from changing our colors.
+         */
+
+        button.setUI(
+                new BasicButtonUI()
+        );
 
         button.setMaximumSize(
                 new Dimension(
@@ -586,6 +809,13 @@ public class MainFrame extends JFrame {
         );
 
         button.setPreferredSize(
+                new Dimension(
+                        200,
+                        45
+                )
+        );
+
+        button.setMinimumSize(
                 new Dimension(
                         200,
                         45
@@ -623,59 +853,57 @@ public class MainFrame extends JFrame {
 
         button.setFocusPainted(false);
 
+        button.setFocusable(false);
+
         button.setOpaque(true);
+
+        button.setContentAreaFilled(true);
+
+        button.setBorderPainted(false);
+
+        // ========================================================
+        // HOVER
+        // ========================================================
+
+        button.addMouseListener(
+                new java.awt.event.MouseAdapter() {
+
+                    @Override
+                    public void mouseEntered(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        button.setBackground(
+                                BUTTON_HOVER_COLOR
+                        );
+
+                        button.setForeground(
+                                TEXT_COLOR
+                        );
+                    }
+
+                    @Override
+                    public void mouseExited(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        button.setBackground(
+                                SIDEBAR_COLOR
+                        );
+
+                        button.setForeground(
+                                TEXT_COLOR
+                        );
+                    }
+                }
+        );
 
         return button;
     }
 
-    private JPanel createPlaceholderPanel(
-            String title
-    ) {
-
-        JPanel panel =
-                new JPanel(
-                        new BorderLayout()
-                );
-
-        panel.setBackground(
-                CONTENT_COLOR
-        );
-
-        panel.setBorder(
-                new EmptyBorder(
-                        30,
-                        30,
-                        30,
-                        30
-                )
-        );
-
-        JLabel label =
-                new JLabel(title);
-
-        label.setFont(
-                new Font(
-                        "Segoe UI",
-                        Font.BOLD,
-                        28
-                )
-        );
-
-        label.setForeground(
-                new Color(
-                        35,
-                        40,
-                        50
-                )
-        );
-
-        panel.add(
-                label,
-                BorderLayout.NORTH
-        );
-
-        return panel;
-    }
+    // ============================================================
+    // SHOW PAGE
+    // ============================================================
 
     private void showPage(
             String page
@@ -684,6 +912,111 @@ public class MainFrame extends JFrame {
         cardLayout.show(
                 contentCards,
                 page
+        );
+
+        updateSelectedButton(page);
+    }
+
+    // ============================================================
+    // UPDATE SELECTED BUTTON
+    // ============================================================
+
+    private void updateSelectedButton(
+            String page
+    ) {
+
+        resetButton(btnDashboard);
+        resetButton(btnCustomers);
+        resetButton(btnPets);
+        resetButton(btnVeterinarians);
+        resetButton(btnServices);
+        resetButton(btnAppointments);
+        resetButton(btnTreatments);
+        resetButton(btnPayments);
+        resetButton(btnReports);
+
+        switch (page) {
+
+            case "DASHBOARD":
+                selectButton(btnDashboard);
+                break;
+
+            case "CUSTOMERS":
+                selectButton(btnCustomers);
+                break;
+
+            case "PETS":
+                selectButton(btnPets);
+                break;
+
+            case "VETERINARIANS":
+                selectButton(btnVeterinarians);
+                break;
+
+            case "SERVICES":
+                selectButton(btnServices);
+                break;
+
+            case "APPOINTMENTS":
+                selectButton(btnAppointments);
+                break;
+
+            case "TREATMENTS":
+                selectButton(btnTreatments);
+                break;
+
+            case "PAYMENTS":
+                selectButton(btnPayments);
+                break;
+
+            case "REPORTS":
+                selectButton(btnReports);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    // ============================================================
+    // RESET BUTTON
+    // ============================================================
+
+    private void resetButton(
+            JButton button
+    ) {
+
+        if (button == null) {
+            return;
+        }
+
+        button.setBackground(
+                SIDEBAR_COLOR
+        );
+
+        button.setForeground(
+                TEXT_COLOR
+        );
+    }
+
+    // ============================================================
+    // SELECT BUTTON
+    // ============================================================
+
+    private void selectButton(
+            JButton button
+    ) {
+
+        if (button == null) {
+            return;
+        }
+
+        button.setBackground(
+                BUTTON_SELECTED_COLOR
+        );
+
+        button.setForeground(
+                Color.WHITE
         );
     }
 }

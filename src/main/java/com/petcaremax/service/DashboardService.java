@@ -1,6 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.DashboardDAO;
+import java.util.List;
 
 public class DashboardService {
 
@@ -21,6 +22,10 @@ public class DashboardService {
     public int getAppointmentCount() throws Exception {
         return dashboardDAO.getAppointmentCount();
     }
+    
+    public List<Object[]> getRecentAppointments() throws Exception {
+    return dashboardDAO.getRecentAppointments();
+}
 
     public double getRevenue() throws Exception {
         return dashboardDAO.getRevenue();
