@@ -316,16 +316,55 @@ public class MainFrame extends JFrame {
         btnReports =
                 createMenuButton("Reports");
 
-        navigationPanel.add(btnDashboard);
-        navigationPanel.add(btnCustomers);
-        navigationPanel.add(btnPets);
-        navigationPanel.add(btnVeterinarians);
-        navigationPanel.add(btnServices);
-        navigationPanel.add(btnAppointments);
-        navigationPanel.add(btnTreatments);
-        navigationPanel.add(btnPayments);
-        navigationPanel.add(btnReports);
+     String role = "";
 
+if (Session.isLoggedIn()) {
+    role = Session.getCurrentUser().getRole();
+}
+
+// ========================================================
+// ADMIN
+// ========================================================
+
+if (role.equalsIgnoreCase("Admin")) {
+
+    navigationPanel.add(btnDashboard);
+    navigationPanel.add(btnCustomers);
+    navigationPanel.add(btnPets);
+    navigationPanel.add(btnVeterinarians);
+    navigationPanel.add(btnServices);
+    navigationPanel.add(btnAppointments);
+    navigationPanel.add(btnTreatments);
+    navigationPanel.add(btnPayments);
+    navigationPanel.add(btnReports);
+}
+
+// ========================================================
+// RECEPTIONIST
+// ========================================================
+
+else if (role.equalsIgnoreCase("Receptionist")) {
+
+    navigationPanel.add(btnDashboard);
+    navigationPanel.add(btnCustomers);
+    navigationPanel.add(btnPets);
+    navigationPanel.add(btnAppointments);
+    navigationPanel.add(btnPayments);
+}
+
+// ========================================================
+// VETERINARIAN
+// ========================================================
+
+else if (role.equalsIgnoreCase("Veterinarian")) {
+
+    navigationPanel.add(btnDashboard);
+    navigationPanel.add(btnPets);
+    navigationPanel.add(btnAppointments);
+    navigationPanel.add(btnTreatments);
+
+
+}
         // ========================================================
         // BUTTON ACTIONS
         // ========================================================
@@ -1553,4 +1592,14 @@ public class MainFrame extends JFrame {
                 Color.WHITE
         );
     }
+    private boolean hasRole(String role) {
+
+    if (!Session.isLoggedIn()) {
+        return false;
+    }
+
+    return role.equalsIgnoreCase(
+            Session.getCurrentUser().getRole()
+    );
+}
 }
