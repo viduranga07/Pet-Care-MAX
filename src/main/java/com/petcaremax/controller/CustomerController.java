@@ -1,5 +1,6 @@
 package com.petcaremax.controller;
 
+import com.petcaremax.exception.CustomerValidationException;
 import com.petcaremax.model.Customer;
 import com.petcaremax.service.CustomerService;
 
@@ -13,12 +14,16 @@ public class CustomerController {
         this.customerService = new CustomerService();
     }
 
-    // Add Customer
+    // ============================================================
+    // ADD CUSTOMER
+    // ============================================================
+
     public boolean addCustomer(
             String fullName,
             String phone,
             String email,
-            String address) {
+            String address)
+            throws CustomerValidationException {
 
         Customer customer = new Customer(
                 fullName,
@@ -30,25 +35,35 @@ public class CustomerController {
         return customerService.addCustomer(customer);
     }
 
-    // Get Customer by ID
+    // ============================================================
+    // GET CUSTOMER BY ID
+    // ============================================================
+
     public Customer getCustomerById(int customerId) {
 
         return customerService.getCustomerById(customerId);
     }
 
-    // Get All Customers
+    // ============================================================
+    // GET ALL CUSTOMERS
+    // ============================================================
+
     public List<Customer> getAllCustomers() {
 
         return customerService.getAllCustomers();
     }
 
-    // Update Customer
+    // ============================================================
+    // UPDATE CUSTOMER
+    // ============================================================
+
     public boolean updateCustomer(
             int customerId,
             String fullName,
             String phone,
             String email,
-            String address) {
+            String address)
+            throws CustomerValidationException {
 
         Customer customer = new Customer(
                 customerId,
@@ -62,7 +77,10 @@ public class CustomerController {
         return customerService.updateCustomer(customer);
     }
 
-    // Delete Customer
+    // ============================================================
+    // DELETE CUSTOMER
+    // ============================================================
+
     public boolean deleteCustomer(int customerId) {
 
         return customerService.deleteCustomer(customerId);

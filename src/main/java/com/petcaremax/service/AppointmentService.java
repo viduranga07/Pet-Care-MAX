@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.AppointmentDAO;
-import com.petcaremax.dao.AppointmentDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Appointment;
 
 import java.time.LocalDate;
@@ -13,8 +13,8 @@ public class AppointmentService {
     private final AppointmentDAO appointmentDAO;
 
     public AppointmentService() {
-        appointmentDAO = new AppointmentDAOImpl();
-    }
+    this.appointmentDAO = DAOFactory.createAppointmentDAO();
+}
 
     public boolean addAppointment(Appointment appointment) {
 

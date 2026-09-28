@@ -4,6 +4,7 @@ import com.petcaremax.service.DashboardService;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class DashboardPanel extends JPanel {
@@ -29,9 +31,45 @@ public class DashboardPanel extends JPanel {
 
     private JTable appointmentTable;
 
+    // ============================================================
+    // PETCAREMAX THEME COLORS
+    // ============================================================
+
+    private static final Color BACKGROUND =
+            new Color(245, 247, 250);
+
+    private static final Color CARD_WHITE =
+            Color.WHITE;
+
+    private static final Color TEXT =
+            new Color(35, 40, 50);
+
+    private static final Color MUTED =
+            new Color(110, 120, 135);
+
+    private static final Color BORDER =
+            new Color(225, 228, 235);
+
+    private static final Color GOLD =
+            new Color(245, 190, 55);
+
+    private static final Color GREEN =
+            new Color(46, 155, 98);
+
+    private static final Color RED =
+            new Color(217, 83, 79);
+
+    private static final Color AMBER =
+            new Color(207, 145, 30);
+
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
+
     public DashboardPanel() {
 
-        dashboardService = new DashboardService();
+        dashboardService =
+                new DashboardService();
 
         initializeUI();
 
@@ -44,32 +82,40 @@ public class DashboardPanel extends JPanel {
 
     private void initializeUI() {
 
-        setLayout(new BorderLayout());
-
-        setBackground(
-                new Color(245, 247, 250)
+        setLayout(
+                new BorderLayout(0, 18)
         );
+
+        setBackground(BACKGROUND);
 
         setBorder(
                 new EmptyBorder(
+                        28,
                         30,
-                        30,
-                        30,
+                        28,
                         30
                 )
         );
 
         // ========================================================
-        // TITLE
+        // PAGE HEADER
         // ========================================================
 
-        JPanel headingPanel = new JPanel();
+        JPanel headingPanel =
+                new JPanel(
+                        new BorderLayout()
+                );
 
         headingPanel.setOpaque(false);
 
-        headingPanel.setLayout(
+        JPanel titlePanel =
+                new JPanel();
+
+        titlePanel.setOpaque(false);
+
+        titlePanel.setLayout(
                 new javax.swing.BoxLayout(
-                        headingPanel,
+                        titlePanel,
                         javax.swing.BoxLayout.Y_AXIS
                 )
         );
@@ -85,13 +131,11 @@ public class DashboardPanel extends JPanel {
                 )
         );
 
-        lblTitle.setForeground(
-                new Color(35, 40, 50)
-        );
+        lblTitle.setForeground(TEXT);
 
         JLabel lblSubtitle =
                 new JLabel(
-                        "Overview of your veterinary practice"
+                        "Welcome to PetCareMAX — an overview of your veterinary practice."
                 );
 
         lblSubtitle.setFont(
@@ -102,12 +146,42 @@ public class DashboardPanel extends JPanel {
                 )
         );
 
-        lblSubtitle.setForeground(
-                new Color(110, 120, 135)
+        lblSubtitle.setForeground(MUTED);
+
+        titlePanel.add(lblTitle);
+
+        titlePanel.add(
+                javax.swing.Box.createVerticalStrut(5)
         );
 
-        headingPanel.add(lblTitle);
-        headingPanel.add(lblSubtitle);
+        titlePanel.add(lblSubtitle);
+
+        JLabel lblSystem =
+                new JLabel("PETCAREMAX");
+
+        lblSystem.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        13
+                )
+        );
+
+        lblSystem.setForeground(GOLD);
+
+        lblSystem.setHorizontalAlignment(
+                JLabel.RIGHT
+        );
+
+        headingPanel.add(
+                titlePanel,
+                BorderLayout.WEST
+        );
+
+        headingPanel.add(
+                lblSystem,
+                BorderLayout.EAST
+        );
 
         add(
                 headingPanel,
@@ -115,18 +189,18 @@ public class DashboardPanel extends JPanel {
         );
 
         // ========================================================
-        // CENTER
+        // CENTER PANEL
         // ========================================================
 
         JPanel centerPanel =
                 new JPanel(
-                        new BorderLayout()
+                        new BorderLayout(0, 18)
                 );
 
         centerPanel.setOpaque(false);
 
         // ========================================================
-        // STAT CARDS
+        // STATISTIC CARDS
         // ========================================================
 
         JPanel cardPanel =
@@ -134,59 +208,86 @@ public class DashboardPanel extends JPanel {
                         new GridLayout(
                                 1,
                                 4,
-                                20,
-                                20
+                                16,
+                                0
                         )
                 );
 
         cardPanel.setOpaque(false);
 
-        cardPanel.setBorder(
-                new EmptyBorder(
-                        25,
-                        0,
-                        25,
-                        0
-                )
-        );
-
         lblCustomerCount =
-                new JLabel("...");
+                createValueLabel();
 
         lblPetCount =
-                new JLabel("...");
+                createValueLabel();
 
         lblAppointmentCount =
-                new JLabel("...");
+                createValueLabel();
 
         lblRevenue =
-                new JLabel("...");
+                createValueLabel();
+
+        // --------------------------------------------------------
+        // CUSTOMER CARD
+        // --------------------------------------------------------
 
         cardPanel.add(
                 createStatCard(
                         "Customers",
-                        lblCustomerCount
+                        "Registered customers",
+                        lblCustomerCount,
+                        new Color(
+                                67,
+                                112,
+                                198
+                        )
                 )
         );
+
+        // --------------------------------------------------------
+        // PET CARD
+        // --------------------------------------------------------
 
         cardPanel.add(
                 createStatCard(
                         "Pets",
-                        lblPetCount
+                        "Registered pets",
+                        lblPetCount,
+                        new Color(
+                                92,
+                                151,
+                                112
+                        )
                 )
         );
+
+        // --------------------------------------------------------
+        // APPOINTMENT CARD
+        // --------------------------------------------------------
 
         cardPanel.add(
                 createStatCard(
                         "Appointments",
-                        lblAppointmentCount
+                        "Total appointments",
+                        lblAppointmentCount,
+                        GOLD
                 )
         );
+
+        // --------------------------------------------------------
+        // REVENUE CARD
+        // --------------------------------------------------------
 
         cardPanel.add(
                 createStatCard(
                         "Revenue",
-                        lblRevenue
+                        "Paid revenue",
+                        lblRevenue,
+                        new Color(
+                                142,
+                                93,
+                                175
+                        )
                 )
         );
 
@@ -196,35 +297,41 @@ public class DashboardPanel extends JPanel {
         );
 
         // ========================================================
-        // RECENT APPOINTMENTS
+        // RECENT APPOINTMENTS CARD
         // ========================================================
 
-        JPanel recentPanel =
+        RoundedPanel recentPanel =
+                new RoundedPanel(
+                        16,
+                        CARD_WHITE
+                );
+
+        recentPanel.setLayout(
+                new BorderLayout(
+                        0,
+                        14
+                )
+        );
+
+        recentPanel.setBorder(
+                new EmptyBorder(
+                        18,
+                        20,
+                        14,
+                        20
+                )
+        );
+
+        // ========================================================
+        // RECENT APPOINTMENTS HEADER
+        // ========================================================
+
+        JPanel recentHeader =
                 new JPanel(
                         new BorderLayout()
                 );
 
-        recentPanel.setBackground(
-                Color.WHITE
-        );
-
-        recentPanel.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(
-                                new Color(
-                                        225,
-                                        228,
-                                        235
-                                )
-                        ),
-                        new EmptyBorder(
-                                20,
-                                20,
-                                20,
-                                20
-                        )
-                )
-        );
+        recentHeader.setOpaque(false);
 
         JLabel lblRecent =
                 new JLabel(
@@ -239,8 +346,39 @@ public class DashboardPanel extends JPanel {
                 )
         );
 
-        recentPanel.add(
+        lblRecent.setForeground(TEXT);
+
+        JLabel lblRecentHint =
+                new JLabel(
+                        "Latest scheduled activity"
+                );
+
+        lblRecentHint.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        12
+                )
+        );
+
+        lblRecentHint.setForeground(MUTED);
+
+        lblRecentHint.setHorizontalAlignment(
+                JLabel.RIGHT
+        );
+
+        recentHeader.add(
                 lblRecent,
+                BorderLayout.WEST
+        );
+
+        recentHeader.add(
+                lblRecentHint,
+                BorderLayout.EAST
+        );
+
+        recentPanel.add(
+                recentHeader,
                 BorderLayout.NORTH
         );
 
@@ -249,26 +387,37 @@ public class DashboardPanel extends JPanel {
         // ========================================================
 
         String[] columnNames = {
-                "Customer",
-                "Pet",
-                "Veterinarian",
-                "Date",
-                "Status"
+            "Customer",
+            "Pet",
+            "Veterinarian",
+            "Date",
+            "Status"
         };
-
-        /*
-         * IMPORTANT:
-         * Use DefaultTableModel explicitly.
-         * This prevents ClassCastException when we update
-         * the table after loading database data.
-         */
 
         DefaultTableModel tableModel =
                 new DefaultTableModel(
                         new Object[][]{
-                                {"-", "-", "-", "-", "-"},
-                                {"-", "-", "-", "-", "-"},
-                                {"-", "-", "-", "-", "-"}
+                            {
+                                "-",
+                                "-",
+                                "-",
+                                "-",
+                                "-"
+                            },
+                            {
+                                "-",
+                                "-",
+                                "-",
+                                "-",
+                                "-"
+                            },
+                            {
+                                "-",
+                                "-",
+                                "-",
+                                "-",
+                                "-"
+                            }
                         },
                         columnNames
                 ) {
@@ -285,7 +434,7 @@ public class DashboardPanel extends JPanel {
         appointmentTable =
                 new JTable(tableModel);
 
-        appointmentTable.setRowHeight(32);
+        appointmentTable.setRowHeight(36);
 
         appointmentTable.setFont(
                 new Font(
@@ -295,20 +444,128 @@ public class DashboardPanel extends JPanel {
                 )
         );
 
-        appointmentTable.getTableHeader()
+        appointmentTable.setForeground(TEXT);
+
+        appointmentTable.setBackground(
+                Color.WHITE
+        );
+
+        appointmentTable.setSelectionBackground(
+                new Color(
+                        255,
+                        247,
+                        222
+                )
+        );
+
+        appointmentTable.setSelectionForeground(
+                TEXT
+        );
+
+        appointmentTable.setGridColor(
+                new Color(
+                        238,
+                        240,
+                        244
+                )
+        );
+
+        appointmentTable.setShowVerticalLines(
+                false
+        );
+
+        appointmentTable.setShowHorizontalLines(
+                true
+        );
+
+        appointmentTable.setIntercellSpacing(
+                new java.awt.Dimension(
+                        0,
+                        1
+                )
+        );
+
+        appointmentTable.setAutoCreateRowSorter(
+                true
+        );
+
+        appointmentTable.setFillsViewportHeight(
+                true
+        );
+
+        // ========================================================
+        // TABLE HEADER
+        // ========================================================
+
+        appointmentTable
+                .getTableHeader()
                 .setFont(
                         new Font(
                                 "Segoe UI",
                                 Font.BOLD,
-                                13
+                                12
                         )
                 );
 
-        appointmentTable.setAutoCreateRowSorter(true);
+        appointmentTable
+                .getTableHeader()
+                .setForeground(TEXT);
+
+        appointmentTable
+                .getTableHeader()
+                .setBackground(
+                        new Color(
+                                248,
+                                249,
+                                251
+                        )
+                );
+
+        appointmentTable
+                .getTableHeader()
+                .setPreferredSize(
+                        new java.awt.Dimension(
+                                0,
+                                38
+                        )
+                );
+
+        appointmentTable
+                .getTableHeader()
+                .setBorder(
+                        BorderFactory.createMatteBorder(
+                                0,
+                                0,
+                                1,
+                                0,
+                                BORDER
+                        )
+                );
+
+        // ========================================================
+        // TABLE CELL RENDERER
+        // ========================================================
+
+        appointmentTable.setDefaultRenderer(
+                Object.class,
+                new DashboardTableCellRenderer()
+        );
 
         JScrollPane scrollPane =
                 new JScrollPane(
                         appointmentTable
+                );
+
+        scrollPane.setBorder(
+                BorderFactory.createLineBorder(
+                        BORDER
+                )
+        );
+
+        scrollPane
+                .getViewport()
+                .setBackground(
+                        Color.WHITE
                 );
 
         recentPanel.add(
@@ -317,7 +574,7 @@ public class DashboardPanel extends JPanel {
         );
 
         // ========================================================
-        // LOADING LABEL
+        // LOADING MESSAGE
         // ========================================================
 
         lblLoading =
@@ -329,17 +586,11 @@ public class DashboardPanel extends JPanel {
                 new Font(
                         "Segoe UI",
                         Font.PLAIN,
-                        13
+                        12
                 )
         );
 
-        lblLoading.setForeground(
-                new Color(
-                        110,
-                        120,
-                        135
-                )
-        );
+        lblLoading.setForeground(MUTED);
 
         recentPanel.add(
                 lblLoading,
@@ -358,40 +609,88 @@ public class DashboardPanel extends JPanel {
     }
 
     // ============================================================
+    // VALUE LABEL
+    // ============================================================
+
+    private JLabel createValueLabel() {
+
+        JLabel label =
+                new JLabel("...");
+
+        label.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        26
+                )
+        );
+
+        label.setForeground(TEXT);
+
+        return label;
+    }
+
+    // ============================================================
     // STAT CARD
     // ============================================================
 
     private JPanel createStatCard(
             String title,
-            JLabel valueLabel
+            String description,
+            JLabel valueLabel,
+            Color accent
     ) {
 
-        JPanel card =
+        RoundedPanel card =
+                new RoundedPanel(
+                        16,
+                        CARD_WHITE
+                );
+
+        card.setLayout(
+                new BorderLayout(
+                        0,
+                        5
+                )
+        );
+
+        card.setBorder(
+                new EmptyBorder(
+                        16,
+                        18,
+                        15,
+                        18
+                )
+        );
+
+        // --------------------------------------------------------
+        // ACCENT BAR
+        // --------------------------------------------------------
+
+        JPanel accentBar =
+                new JPanel();
+
+        accentBar.setBackground(
+                accent
+        );
+
+        accentBar.setPreferredSize(
+                new java.awt.Dimension(
+                        0,
+                        4
+                )
+        );
+
+        // --------------------------------------------------------
+        // CARD TITLE
+        // --------------------------------------------------------
+
+        JPanel top =
                 new JPanel(
                         new BorderLayout()
                 );
 
-        card.setBackground(
-                Color.WHITE
-        );
-
-        card.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(
-                                new Color(
-                                        225,
-                                        228,
-                                        235
-                                )
-                        ),
-                        new EmptyBorder(
-                                18,
-                                20,
-                                18,
-                                20
-                        )
-                )
-        );
+        top.setOpaque(false);
 
         JLabel titleLabel =
                 new JLabel(title);
@@ -399,43 +698,95 @@ public class DashboardPanel extends JPanel {
         titleLabel.setFont(
                 new Font(
                         "Segoe UI",
-                        Font.PLAIN,
-                        14
+                        Font.BOLD,
+                        13
                 )
         );
 
-        titleLabel.setForeground(
-                new Color(
-                        100,
-                        110,
-                        125
-                )
-        );
+        titleLabel.setForeground(MUTED);
 
-        valueLabel.setFont(
+        JLabel dot =
+                new JLabel("●");
+
+        dot.setFont(
                 new Font(
                         "Segoe UI",
-                        Font.BOLD,
-                        27
+                        Font.PLAIN,
+                        11
                 )
         );
 
-        valueLabel.setForeground(
-                new Color(
-                        30,
-                        35,
-                        45
+        dot.setForeground(accent);
+
+        top.add(
+                titleLabel,
+                BorderLayout.WEST
+        );
+
+        top.add(
+                dot,
+                BorderLayout.EAST
+        );
+
+        // --------------------------------------------------------
+        // DESCRIPTION
+        // --------------------------------------------------------
+
+        JLabel descriptionLabel =
+                new JLabel(
+                        description
+                );
+
+        descriptionLabel.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        11
                 )
         );
+
+        descriptionLabel.setForeground(
+                MUTED
+        );
+
+        // --------------------------------------------------------
+        // VALUE AREA
+        // --------------------------------------------------------
+
+        JPanel valueArea =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        valueArea.setOpaque(false);
+
+        valueArea.add(
+                valueLabel,
+                BorderLayout.NORTH
+        );
+
+        valueArea.add(
+                descriptionLabel,
+                BorderLayout.SOUTH
+        );
+
+        // --------------------------------------------------------
+        // ADD COMPONENTS
+        // --------------------------------------------------------
 
         card.add(
-                titleLabel,
+                accentBar,
                 BorderLayout.NORTH
         );
 
         card.add(
-                valueLabel,
+                top,
                 BorderLayout.CENTER
+        );
+
+        card.add(
+                valueArea,
+                BorderLayout.SOUTH
         );
 
         return card;
@@ -454,9 +805,9 @@ public class DashboardPanel extends JPanel {
                     protected DashboardData doInBackground()
                             throws Exception {
 
-                        // ----------------------------------------
-                        // Load dashboard statistics
-                        // ----------------------------------------
+                        // ------------------------------------------------
+                        // LOAD DASHBOARD STATISTICS
+                        // ------------------------------------------------
 
                         int customers =
                                 dashboardService
@@ -474,9 +825,9 @@ public class DashboardPanel extends JPanel {
                                 dashboardService
                                         .getRevenue();
 
-                        // ----------------------------------------
-                        // Load recent appointments
-                        // ----------------------------------------
+                        // ------------------------------------------------
+                        // LOAD RECENT APPOINTMENTS
+                        // ------------------------------------------------
 
                         List<Object[]> recentAppointments =
                                 dashboardService
@@ -499,9 +850,9 @@ public class DashboardPanel extends JPanel {
                             DashboardData data =
                                     get();
 
-                            // ====================================
+                            // ============================================
                             // STATISTICS
-                            // ====================================
+                            // ============================================
 
                             lblCustomerCount.setText(
                                     String.valueOf(
@@ -528,9 +879,9 @@ public class DashboardPanel extends JPanel {
                                     )
                             );
 
-                            // ====================================
+                            // ============================================
                             // RECENT APPOINTMENTS
-                            // ====================================
+                            // ============================================
 
                             DefaultTableModel model =
                                     (DefaultTableModel)
@@ -558,11 +909,11 @@ public class DashboardPanel extends JPanel {
 
                                 model.addRow(
                                         new Object[]{
-                                                "-",
-                                                "-",
-                                                "-",
-                                                "-",
-                                                "-"
+                                            "-",
+                                            "-",
+                                            "-",
+                                            "-",
+                                            "-"
                                         }
                                 );
                             }
@@ -575,23 +926,29 @@ public class DashboardPanel extends JPanel {
 
                             e.printStackTrace();
 
-                            // ====================================
+                            // ============================================
                             // ERROR VALUES
-                            // ====================================
+                            // ============================================
 
-                            lblCustomerCount.setText("0");
+                            lblCustomerCount.setText(
+                                    "0"
+                            );
 
-                            lblPetCount.setText("0");
+                            lblPetCount.setText(
+                                    "0"
+                            );
 
-                            lblAppointmentCount.setText("0");
+                            lblAppointmentCount.setText(
+                                    "0"
+                            );
 
                             lblRevenue.setText(
                                     "Rs. 0.00"
                             );
 
-                            // ====================================
+                            // ============================================
                             // ERROR TABLE
-                            // ====================================
+                            // ============================================
 
                             DefaultTableModel model =
                                     (DefaultTableModel)
@@ -602,11 +959,11 @@ public class DashboardPanel extends JPanel {
 
                             model.addRow(
                                     new Object[]{
-                                            "-",
-                                            "-",
-                                            "-",
-                                            "-",
-                                            "-"
+                                        "-",
+                                        "-",
+                                        "-",
+                                        "-",
+                                        "-"
                                     }
                             );
 
@@ -627,8 +984,11 @@ public class DashboardPanel extends JPanel {
     private static class DashboardData {
 
         private final int customers;
+
         private final int pets;
+
         private final int appointments;
+
         private final double revenue;
 
         private final List<Object[]> recentAppointments;
@@ -655,6 +1015,204 @@ public class DashboardPanel extends JPanel {
 
             this.recentAppointments =
                     recentAppointments;
+        }
+    }
+
+    // ============================================================
+    // ROUNDED PANEL
+    // ============================================================
+
+    private static class RoundedPanel
+            extends JPanel {
+
+        private final int radius;
+
+        private final Color background;
+
+        RoundedPanel(
+                int radius,
+                Color background
+        ) {
+
+            this.radius =
+                    radius;
+
+            this.background =
+                    background;
+
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(
+                java.awt.Graphics g
+        ) {
+
+            java.awt.Graphics2D g2 =
+                    (java.awt.Graphics2D)
+                            g.create();
+
+            g2.setRenderingHint(
+                    java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON
+            );
+
+            g2.setColor(background);
+
+            g2.fillRoundRect(
+                    0,
+                    0,
+                    getWidth() - 1,
+                    getHeight() - 1,
+                    radius,
+                    radius
+            );
+
+            g2.setColor(BORDER);
+
+            g2.drawRoundRect(
+                    0,
+                    0,
+                    getWidth() - 1,
+                    getHeight() - 1,
+                    radius,
+                    radius
+            );
+
+            g2.dispose();
+
+            super.paintComponent(g);
+        }
+    }
+
+    // ============================================================
+    // TABLE CELL RENDERER
+    // ============================================================
+
+    private static class DashboardTableCellRenderer
+            extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table,
+                Object value,
+                boolean isSelected,
+                boolean hasFocus,
+                int row,
+                int column
+        ) {
+
+            Component component =
+                    super.getTableCellRendererComponent(
+                            table,
+                            value,
+                            isSelected,
+                            hasFocus,
+                            row,
+                            column
+                    );
+
+            setBorder(
+                    BorderFactory.createEmptyBorder(
+                            0,
+                            10,
+                            0,
+                            10
+                    )
+            );
+
+            setFont(
+                    new Font(
+                            "Segoe UI",
+                            Font.PLAIN,
+                            13
+                    )
+            );
+
+            if (!isSelected) {
+
+                setBackground(
+                        Color.WHITE
+                );
+
+                setForeground(
+                        TEXT
+                );
+            }
+
+            // --------------------------------------------------------
+            // STATUS COLUMN
+            // --------------------------------------------------------
+
+            if (
+                    column == 4
+                    && value != null
+            ) {
+
+                String status =
+                        value.toString()
+                                .trim();
+
+                if (
+                        "Completed"
+                                .equalsIgnoreCase(
+                                        status
+                                )
+                ) {
+
+                    setForeground(
+                            GREEN
+                    );
+
+                    setFont(
+                            new Font(
+                                    "Segoe UI",
+                                    Font.BOLD,
+                                    12
+                            )
+                    );
+
+                } else if (
+                        "Cancelled"
+                                .equalsIgnoreCase(
+                                        status
+                                )
+                ) {
+
+                    setForeground(
+                            RED
+                    );
+
+                    setFont(
+                            new Font(
+                                    "Segoe UI",
+                                    Font.BOLD,
+                                    12
+                            )
+                    );
+
+                } else if (
+                        "Scheduled"
+                                .equalsIgnoreCase(
+                                        status
+                                )
+                ) {
+
+                    setForeground(
+                            AMBER
+                    );
+
+                    setFont(
+                            new Font(
+                                    "Segoe UI",
+                                    Font.BOLD,
+                                    12
+                            )
+                    );
+                }
+            }
+
+            return component;
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.VeterinarianDAO;
-import com.petcaremax.dao.VeterinarianDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Veterinarian;
 
 import java.util.List;
@@ -11,8 +11,8 @@ public class VeterinarianService {
     private final VeterinarianDAO veterinarianDAO;
 
     public VeterinarianService() {
-        veterinarianDAO = new VeterinarianDAOImpl();
-    }
+    this.veterinarianDAO = DAOFactory.createVeterinarianDAO();
+}
 
     public boolean addVeterinarian(Veterinarian veterinarian) {
 

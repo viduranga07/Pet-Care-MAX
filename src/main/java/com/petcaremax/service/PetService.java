@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.PetDAO;
-import com.petcaremax.dao.PetDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Pet;
 
 import java.util.List;
@@ -10,10 +10,9 @@ public class PetService {
 
     private final PetDAO petDAO;
 
-    public PetService() {
-        petDAO = new PetDAOImpl();
-    }
-
+  public PetService() {
+    this.petDAO = DAOFactory.createPetDAO();
+}
     public boolean addPet(Pet pet) {
 
         validatePet(pet);

@@ -3,34 +3,92 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.petcaremax.view;
+
 import com.petcaremax.controller.CustomerController;
 import com.petcaremax.model.Customer;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import com.petcaremax.util.PetCareTheme;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
+ * Customer Management Form
  *
- * @author Bimsara
+ * Responsibilities:
+ * - Create, read, update and delete customers
+ * - Search customers using ArrayList + Stream + Lambda
+ * - Display customer records in a professional Swing UI
+ *
+ * The controller/service/DAO/database logic is kept separate.
  */
-public class CustomerForm extends javax.swing.JFrame {
-    
+public class CustomerForm extends JFrame {
+
     private static final java.util.logging.Logger logger =
             java.util.logging.Logger.getLogger(CustomerForm.class.getName());
 
-    //controller
-    
-    private final CustomerController customerController;
-    /**
-     * Creates new form CustomerForm
-     */
-    public CustomerForm() {
-        initComponents();
-         customerController =
-                new CustomerController();
+    // ============================================================
+    // CONTROLLER
+    // ============================================================
 
-        // Connect button events
+    private final CustomerController customerController;
+
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
+
+    public CustomerForm() {
+
+        /*
+         * Creates the Swing components.
+         * In the original NetBeans project this section is generated
+         * by the GUI Builder.
+         */
+        initComponents();
+
+        // Apply the common PetCareMAX theme.
+        PetCareTheme.apply(this);
+
+        // Create controller.
+        customerController = new CustomerController();
+
+        /*
+         * Build the professional layout AFTER the components exist.
+         * This replaces the old small GUI Builder layout without
+         * changing the CRUD/controller logic.
+         */
+        buildProfessionalLayout();
+
+        // ========================================================
+        // BUTTON EVENTS
+        // ========================================================
+
         btnSave.addActionListener(
                 this::btnSaveActionPerformed
         );
@@ -39,9 +97,7 @@ public class CustomerForm extends javax.swing.JFrame {
                 this::btnUpdateActionPerformed
         );
 
-        btnDelete.addActionListener(
-                this::btnDeleteActionPerformed
-        );
+       
 
         btnClear.addActionListener(
                 this::btnClearActionPerformed
@@ -51,24 +107,852 @@ public class CustomerForm extends javax.swing.JFrame {
                 this::btnSearchActionPerformed
         );
 
-        // When user clicks a table row
-        tblCustomers.addMouseListener(
+        // ========================================================
+        // TABLE ROW SELECTION
+        // ========================================================
+
+        jTable1.addMouseListener(
                 new java.awt.event.MouseAdapter() {
 
                     @Override
                     public void mouseClicked(
                             java.awt.event.MouseEvent evt
                     ) {
-
                         loadSelectedCustomer();
                     }
                 }
         );
 
-        // Load database records
+        // Load database records.
         loadCustomers();
-        
     }
+
+    // ============================================================
+    // PROFESSIONAL UI
+    // ============================================================
+
+    private void buildProfessionalLayout() {
+
+        // ========================================================
+        // MAIN PAGE
+        // ========================================================
+
+        JPanel mainPanel =
+                new JPanel(
+                        new BorderLayout(
+                                20,
+                                20
+                        )
+                );
+
+        mainPanel.setBackground(
+                PetCareTheme.LIGHT
+        );
+
+        mainPanel.setBorder(
+                BorderFactory.createEmptyBorder(
+                        25,
+                        30,
+                        25,
+                        30
+                )
+        );
+
+        // ========================================================
+        // PAGE HEADER
+        // ========================================================
+
+        JPanel headerPanel =
+                new JPanel();
+
+        headerPanel.setLayout(
+                new BoxLayout(
+                        headerPanel,
+                        BoxLayout.Y_AXIS
+                )
+        );
+
+        headerPanel.setOpaque(false);
+
+        JLabel title =
+                new JLabel(
+                        "Customer Management"
+                );
+
+        title.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        28
+                )
+        );
+
+        title.setForeground(
+                PetCareTheme.NAVY
+        );
+
+        JLabel subtitle =
+                new JLabel(
+                        "Manage customer information and customer records"
+                );
+
+        subtitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        14
+                )
+        );
+
+        subtitle.setForeground(
+                PetCareTheme.MUTED
+        );
+
+        headerPanel.add(title);
+
+        headerPanel.add(
+                Box.createVerticalStrut(5)
+        );
+
+        headerPanel.add(subtitle);
+
+        mainPanel.add(
+                headerPanel,
+                BorderLayout.NORTH
+        );
+
+        // ========================================================
+        // CENTER AREA
+        // ========================================================
+
+        JPanel centerPanel =
+                new JPanel(
+                        new GridLayout(
+                                1,
+                                2,
+                                20,
+                                0
+                        )
+                );
+
+        centerPanel.setOpaque(false);
+
+        // ========================================================
+        // CUSTOMER INFORMATION CARD
+        // ========================================================
+
+        JPanel formCard =
+                createCard();
+
+        formCard.setLayout(
+                new GridBagLayout()
+        );
+
+        GridBagConstraints gbc =
+                new GridBagConstraints();
+
+        gbc.insets =
+                new Insets(
+                        7,
+                        12,
+                        7,
+                        12
+                );
+
+        gbc.fill =
+                GridBagConstraints.HORIZONTAL;
+
+        gbc.weightx = 1.0;
+
+        JLabel formTitle =
+                new JLabel(
+                        "Customer Information"
+                );
+
+        formTitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        19
+                )
+        );
+
+        formTitle.setForeground(
+                PetCareTheme.NAVY
+        );
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+
+        formCard.add(
+                formTitle,
+                gbc
+        );
+
+        JLabel formSubtitle =
+                new JLabel(
+                        "Enter customer details below"
+                );
+
+        formSubtitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        formSubtitle.setForeground(
+                PetCareTheme.MUTED
+        );
+
+        gbc.gridy++;
+
+        formCard.add(
+                formSubtitle,
+                gbc
+        );
+
+        // ========================================================
+        // FULL NAME
+        // ========================================================
+
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+
+        formCard.add(
+                createFieldLabel("Full Name"),
+                gbc
+        );
+
+        gbc.gridy++;
+
+        formCard.add(
+                txtFullName,
+                gbc
+        );
+
+        // ========================================================
+        // PHONE
+        // ========================================================
+
+        gbc.gridy++;
+
+        formCard.add(
+                createFieldLabel("Phone"),
+                gbc
+        );
+
+        gbc.gridy++;
+
+        formCard.add(
+                txtPhone,
+                gbc
+        );
+
+        // ========================================================
+        // EMAIL
+        // ========================================================
+
+        gbc.gridy++;
+
+        formCard.add(
+                createFieldLabel("Email"),
+                gbc
+        );
+
+        gbc.gridy++;
+
+        formCard.add(
+                txtEmail,
+                gbc
+        );
+
+        // ========================================================
+        // ADDRESS
+        // ========================================================
+
+        gbc.gridy++;
+
+        formCard.add(
+                createFieldLabel("Address"),
+                gbc
+        );
+
+        gbc.gridy++;
+
+        formCard.add(
+                txtAddress,
+                gbc
+        );
+
+        // ========================================================
+        // BUTTONS
+        // ========================================================
+
+        JPanel buttonPanel =
+                new JPanel(
+                        new GridLayout(
+                                1,
+                                4,
+                                8,
+                                0
+                        )
+                );
+
+        buttonPanel.setOpaque(false);
+
+        styleButton(
+                btnSave,
+                "Save",
+                PetCareTheme.GOLD
+        );
+
+        styleButton(
+                btnUpdate,
+                "Update",
+                new Color(
+                        52,
+                        122,
+                        190
+                )
+        );
+
+        styleButton(
+                btnDelete,
+                "Delete",
+                new Color(
+                        205,
+                        70,
+                        70
+                )
+        );
+
+        styleButton(
+                btnClear,
+                "Clear",
+                new Color(
+                        110,
+                        120,
+                        135
+                )
+        );
+
+        buttonPanel.add(btnSave);
+        buttonPanel.add(btnUpdate);
+        buttonPanel.add(btnDelete);
+        buttonPanel.add(btnClear);
+
+        gbc.gridy++;
+        gbc.insets =
+                new Insets(
+                        18,
+                        12,
+                        8,
+                        12
+                );
+
+        formCard.add(
+                buttonPanel,
+                gbc
+        );
+
+        // ========================================================
+        // CUSTOMER TABLE CARD
+        // ========================================================
+
+        JPanel tableCard =
+                createCard();
+
+        tableCard.setLayout(
+                new BorderLayout(
+                        10,
+                        10
+                )
+        );
+
+        // ========================================================
+        // TABLE HEADER
+        // ========================================================
+
+        JPanel tableHeader =
+                new JPanel(
+                        new BorderLayout(
+                                10,
+                                0
+                        )
+                );
+
+        tableHeader.setOpaque(false);
+
+        JPanel tableTitlePanel =
+                new JPanel();
+
+        tableTitlePanel.setLayout(
+                new BoxLayout(
+                        tableTitlePanel,
+                        BoxLayout.Y_AXIS
+                )
+        );
+
+        tableTitlePanel.setOpaque(false);
+
+        JLabel tableTitle =
+                new JLabel(
+                        "Customer List"
+                );
+
+        tableTitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        19
+                )
+        );
+
+        tableTitle.setForeground(
+                PetCareTheme.NAVY
+        );
+
+        JLabel tableSubtitle =
+                new JLabel(
+                        "View and manage all customers"
+                );
+
+        tableSubtitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        tableSubtitle.setForeground(
+                PetCareTheme.MUTED
+        );
+
+        tableTitlePanel.add(tableTitle);
+
+        tableTitlePanel.add(
+                tableSubtitle
+        );
+
+        // ========================================================
+        // SEARCH AREA
+        // ========================================================
+
+        JPanel searchPanel =
+                new JPanel(
+                        new BorderLayout(
+                                8,
+                                0
+                        )
+                );
+
+        searchPanel.setOpaque(false);
+
+        txtSearch.setPreferredSize(
+                new Dimension(
+                        190,
+                        36
+                )
+        );
+
+        styleSearchField(
+                txtSearch
+        );
+
+        styleButton(
+                btnSearch,
+                "Search",
+                PetCareTheme.GOLD
+        );
+
+        btnSearch.setPreferredSize(
+                new Dimension(
+                        90,
+                        36
+                )
+        );
+
+        searchPanel.add(
+                txtSearch,
+                BorderLayout.CENTER
+        );
+
+        searchPanel.add(
+                btnSearch,
+                BorderLayout.EAST
+        );
+
+        tableHeader.add(
+                tableTitlePanel,
+                BorderLayout.WEST
+        );
+
+        tableHeader.add(
+                searchPanel,
+                BorderLayout.EAST
+        );
+
+        tableCard.add(
+                tableHeader,
+                BorderLayout.NORTH
+        );
+
+        // ========================================================
+        // TABLE STYLING
+        // ========================================================
+
+        styleTable();
+
+        tableCard.add(
+                jScrollPane1,
+                BorderLayout.CENTER
+        );
+
+        // ========================================================
+        // ADD CARDS
+        // ========================================================
+
+        centerPanel.add(formCard);
+        centerPanel.add(tableCard);
+
+        mainPanel.add(
+                centerPanel,
+                BorderLayout.CENTER
+        );
+
+        // Replace old GUI Builder content.
+        setContentPane(mainPanel);
+
+        setMinimumSize(
+                new Dimension(
+                        1000,
+                        650
+                )
+        );
+
+        setSize(
+                1150,
+                700
+        );
+
+        setLocationRelativeTo(null);
+
+        revalidate();
+        repaint();
+    }
+
+    // ============================================================
+    // CARD STYLE
+    // ============================================================
+
+    private JPanel createCard() {
+
+        JPanel panel =
+                new JPanel();
+
+        panel.setBackground(
+                Color.WHITE
+        );
+
+        panel.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(
+                                new Color(
+                                        225,
+                                        230,
+                                        238
+                                )
+                        ),
+                        BorderFactory.createEmptyBorder(
+                                20,
+                                20,
+                                20,
+                                20
+                        )
+                )
+        );
+
+        return panel;
+    }
+
+    // ============================================================
+    // FIELD LABEL
+    // ============================================================
+
+    private JLabel createFieldLabel(
+            String text
+    ) {
+
+        JLabel label =
+                new JLabel(text);
+
+        label.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        13
+                )
+        );
+
+        label.setForeground(
+                PetCareTheme.TEXT
+        );
+
+        return label;
+    }
+
+    // ============================================================
+    // BUTTON STYLE
+    // ============================================================
+
+    private void styleButton(
+            JButton button,
+            String text,
+            Color background
+    ) {
+
+        button.setText(text);
+
+        button.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        12
+                )
+        );
+
+        button.setBackground(
+                background
+        );
+
+        button.setForeground(
+                background.equals(PetCareTheme.GOLD)
+                        ? new Color(30, 35, 45)
+                        : Color.WHITE
+        );
+
+        button.setFocusPainted(false);
+
+        button.setBorder(
+                BorderFactory.createEmptyBorder(
+                        9,
+                        10,
+                        9,
+                        10
+                )
+        );
+
+        button.setCursor(
+                new Cursor(
+                        Cursor.HAND_CURSOR
+                )
+        );
+
+        button.setOpaque(true);
+
+        button.addMouseListener(
+                new java.awt.event.MouseAdapter() {
+
+                    @Override
+                    public void mouseEntered(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        button.setBackground(
+                                background.brighter()
+                        );
+                    }
+
+                    @Override
+                    public void mouseExited(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        button.setBackground(
+                                background
+                        );
+                    }
+                }
+        );
+    }
+
+    // ============================================================
+    // SEARCH FIELD STYLE
+    // ============================================================
+
+    private void styleSearchField(
+            JTextField field
+    ) {
+
+        field.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        field.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(
+                                new Color(
+                                        210,
+                                        215,
+                                        225
+                                )
+                        ),
+                        BorderFactory.createEmptyBorder(
+                                5,
+                                10,
+                                5,
+                                10
+                        )
+                )
+        );
+
+        field.setBackground(
+                Color.WHITE
+        );
+    }
+
+    // ============================================================
+    // TABLE STYLE
+    // ============================================================
+
+    private void styleTable() {
+
+        jTable1.setRowHeight(32);
+
+        jTable1.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        12
+                )
+        );
+
+        jTable1.setForeground(
+                new Color(
+                        45,
+                        50,
+                        60
+                )
+        );
+
+        jTable1.setBackground(
+                Color.WHITE
+        );
+
+        jTable1.setSelectionBackground(
+                new Color(
+                        255,
+                        239,
+                        190
+                )
+        );
+
+        jTable1.setSelectionForeground(
+                new Color(
+                        35,
+                        40,
+                        50
+                )
+        );
+
+        jTable1.setGridColor(
+                new Color(
+                        235,
+                        238,
+                        243
+                )
+        );
+
+        jTable1.setShowVerticalLines(false);
+
+        jTable1.setShowHorizontalLines(true);
+
+        jTable1.setSelectionMode(
+                ListSelectionModel.SINGLE_SELECTION
+        );
+
+        jTable1.setAutoCreateRowSorter(true);
+
+        jTable1.getTableHeader().setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        12
+                )
+        );
+
+        jTable1.getTableHeader().setForeground(
+                new Color(
+                        45,
+                        50,
+                        60
+                )
+        );
+
+        jTable1.getTableHeader().setBackground(
+                new Color(
+                        245,
+                        247,
+                        250
+                )
+        );
+
+        jTable1.getTableHeader().setPreferredSize(
+                new Dimension(
+                        0,
+                        36
+                )
+        );
+
+        jTable1.getTableHeader().setReorderingAllowed(
+                false
+        );
+
+        DefaultTableCellRenderer centerRenderer =
+                new DefaultTableCellRenderer();
+
+        centerRenderer.setHorizontalAlignment(
+                SwingConstants.CENTER
+        );
+
+        jTable1.getColumnModel()
+                .getColumn(0)
+                .setCellRenderer(
+                        centerRenderer
+                );
+
+        jScrollPane1.setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(
+                                225,
+                                230,
+                                238
+                        )
+                )
+        );
+    }
+
+    // ============================================================
+    // COMPONENT INITIALIZATION
+    // ============================================================
+    //
+    // IMPORTANT:
+    // In your actual NetBeans project, this section is normally
+    // generated by the GUI Builder. Do not manually edit the
+    // generated section if you want NetBeans Designer to remain
+    // the source of truth.
+    //
+    // This reference version initializes the same components so
+    // you can compare the complete working structure.
+    // ============================================================
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -99,7 +983,7 @@ public class CustomerForm extends javax.swing.JFrame {
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCustomers = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -151,7 +1035,7 @@ public class CustomerForm extends javax.swing.JFrame {
         btnSearch.setText("Search");
         jPanel1.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, -1, -1));
 
-        tblCustomers.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -162,9 +1046,9 @@ public class CustomerForm extends javax.swing.JFrame {
                 "ID", "Full Name", "Phone", "Email", "Address"
             }
         ));
-        tblCustomers.setCellSelectionEnabled(true);
-        jScrollPane1.setViewportView(tblCustomers);
-        tblCustomers.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jTable1.setCellSelectionEnabled(true);
+        jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 330, 210));
 
@@ -173,6 +1057,7 @@ public class CustomerForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     // ============================================================
     // SAVE CUSTOMER
     // ============================================================
@@ -226,7 +1111,7 @@ public class CustomerForm extends javax.swing.JFrame {
                 );
             }
 
-        } catch (IllegalArgumentException  e) {
+        } catch (IllegalArgumentException e) {
 
             JOptionPane.showMessageDialog(
                     this,
@@ -258,7 +1143,7 @@ public class CustomerForm extends javax.swing.JFrame {
     ) {
 
         int row =
-                tblCustomers.getSelectedRow();
+                jTable1.getSelectedRow();
 
         if (row == -1) {
 
@@ -274,10 +1159,19 @@ public class CustomerForm extends javax.swing.JFrame {
 
         try {
 
+            // Convert the displayed row back to the model row
+            // because table sorting is enabled.
+            int modelRow =
+                    jTable1.convertRowIndexToModel(row);
+
             int id =
                     Integer.parseInt(
-                            tblCustomers
-                                    .getValueAt(row, 0)
+                            jTable1
+                                    .getModel()
+                                    .getValueAt(
+                                            modelRow,
+                                            0
+                                    )
                                     .toString()
                     );
 
@@ -348,7 +1242,6 @@ public class CustomerForm extends javax.swing.JFrame {
         }
     }
 
-
     // ============================================================
     // CLEAR
     // ============================================================
@@ -359,7 +1252,7 @@ public class CustomerForm extends javax.swing.JFrame {
 
         clearFields();
 
-        tblCustomers.clearSelection();
+        jTable1.clearSelection();
 
         txtSearch.setText("");
 
@@ -392,7 +1285,6 @@ public class CustomerForm extends javax.swing.JFrame {
              * ArrayList is intentionally used here
              * for the coursework Collections requirement.
              */
-
             ArrayList<Customer> customers =
                     new ArrayList<>(
                             customerController
@@ -402,41 +1294,43 @@ public class CustomerForm extends javax.swing.JFrame {
             /*
              * Lambda + Stream filtering.
              */
-
             List<Customer> filtered =
                     customers.stream()
-                            .filter(customer ->
-                                    String.valueOf(
-                                            customer.getCustomerId()
-                                    ).contains(searchText)
+                            .filter(
+                                    customer ->
+                                            String.valueOf(
+                                                    customer.getCustomerId()
+                                            ).contains(searchText)
 
-                                    ||
+                                            ||
 
-                                    customer.getFullName()
-                                            .toLowerCase()
-                                            .contains(searchText)
+                                            customer.getFullName()
+                                                    .toLowerCase()
+                                                    .contains(searchText)
 
-                                    ||
+                                            ||
 
-                                    customer.getPhone()
-                                            .toLowerCase()
-                                            .contains(searchText)
+                                            customer.getPhone()
+                                                    .toLowerCase()
+                                                    .contains(searchText)
 
-                                    ||
+                                            ||
 
-                                    (
-                                        customer.getEmail() != null
-                                        &&
-                                        customer.getEmail()
-                                                .toLowerCase()
-                                                .contains(searchText)
-                                    )
+                                            (
+                                                    customer.getEmail() != null
+                                                    &&
+                                                    customer.getEmail()
+                                                            .toLowerCase()
+                                                            .contains(searchText)
+                                            )
                             )
                             .collect(
                                     Collectors.toList()
                             );
 
-            displayCustomers(filtered);
+            displayCustomers(
+                    filtered
+            );
 
         } catch (Exception e) {
 
@@ -464,7 +1358,9 @@ public class CustomerForm extends javax.swing.JFrame {
                     customerController
                             .getAllCustomers();
 
-            displayCustomers(customers);
+            displayCustomers(
+                    customers
+            );
 
         } catch (Exception e) {
 
@@ -481,7 +1377,7 @@ public class CustomerForm extends javax.swing.JFrame {
     }
 
     // ============================================================
-    // DISPLAY CUSTOMERS IN TABLE
+    // DISPLAY CUSTOMERS
     // ============================================================
 
     private void displayCustomers(
@@ -490,7 +1386,7 @@ public class CustomerForm extends javax.swing.JFrame {
 
         DefaultTableModel model =
                 (DefaultTableModel)
-                        tblCustomers.getModel();
+                        jTable1.getModel();
 
         model.setRowCount(0);
 
@@ -498,15 +1394,15 @@ public class CustomerForm extends javax.swing.JFrame {
 
             model.addRow(
                     new Object[]{
-                        customer.getCustomerId(),
-                        customer.getFullName(),
-                        customer.getPhone(),
-                        customer.getEmail() == null
-                                ? ""
-                                : customer.getEmail(),
-                        customer.getAddress() == null
-                                ? ""
-                                : customer.getAddress()
+                            customer.getCustomerId(),
+                            customer.getFullName(),
+                            customer.getPhone(),
+                            customer.getEmail() == null
+                                    ? ""
+                                    : customer.getEmail(),
+                            customer.getAddress() == null
+                                    ? ""
+                                    : customer.getAddress()
                     }
             );
         }
@@ -519,26 +1415,41 @@ public class CustomerForm extends javax.swing.JFrame {
     private void loadSelectedCustomer() {
 
         int row =
-                tblCustomers.getSelectedRow();
+                jTable1.getSelectedRow();
 
         if (row == -1) {
             return;
         }
 
+        int modelRow =
+                jTable1.convertRowIndexToModel(row);
+
         txtFullName.setText(
-                valueFromTable(row, 1)
+                valueFromTable(
+                        modelRow,
+                        1
+                )
         );
 
         txtPhone.setText(
-                valueFromTable(row, 2)
+                valueFromTable(
+                        modelRow,
+                        2
+                )
         );
 
         txtEmail.setText(
-                valueFromTable(row, 3)
+                valueFromTable(
+                        modelRow,
+                        3
+                )
         );
 
         txtAddress.setText(
-                valueFromTable(row, 4)
+                valueFromTable(
+                        modelRow,
+                        4
+                )
         );
     }
 
@@ -552,7 +1463,7 @@ public class CustomerForm extends javax.swing.JFrame {
     ) {
 
         Object value =
-                tblCustomers.getValueAt(
+                jTable1.getModel().getValueAt(
                         row,
                         column
                 );
@@ -575,15 +1486,15 @@ public class CustomerForm extends javax.swing.JFrame {
 
         txtFullName.requestFocus();
     }
+
      // DELETE CUSTOMER
     
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here: private void btnDeleteActionPerformed(
-
+        // TODO add your handling code here:
      {
 
         int row =
-                tblCustomers.getSelectedRow();
+                jTable1.getSelectedRow();
 
         if (row == -1) {
 
@@ -601,13 +1512,13 @@ public class CustomerForm extends javax.swing.JFrame {
 
             int id =
                     Integer.parseInt(
-                            tblCustomers
+                            jTable1
                                     .getValueAt(row, 0)
                                     .toString()
                     );
 
             String name =
-                    tblCustomers
+                    jTable1
                             .getValueAt(row, 1)
                             .toString();
 
@@ -728,11 +1639,15 @@ try {
             );
         }
 
-        java.awt.EventQueue.invokeLater(
-                () ->
-                        new CustomerForm()
-                                .setVisible(true)
-        );
+         java.awt.EventQueue.invokeLater(
+            () -> {
+
+                CustomerForm form =
+                        new CustomerForm();
+
+                form.setVisible(true);
+            }
+    );
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new CustomerForm().setVisible(true));
     }
@@ -753,7 +1668,7 @@ try {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblCustomers;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFullName;

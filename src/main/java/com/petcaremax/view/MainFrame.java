@@ -1,5 +1,8 @@
 package com.petcaremax.view;
 
+import com.petcaremax.service.ReportService;
+import com.petcaremax.util.Session;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -407,7 +410,17 @@ public class MainFrame extends JFrame {
                             JOptionPane.YES_OPTION
                     ) {
 
+                        // Clear logged-in user
+                        Session.logout();
+
+                        // Close MainFrame
                         dispose();
+
+                        // Open LoginForm
+                        LoginForm loginForm =
+                                new LoginForm();
+
+                        loginForm.setVisible(true);
                     }
                 }
         );
@@ -616,6 +629,29 @@ public class MainFrame extends JFrame {
                 )
         );
 
+        // ========================================================
+        // PAGE HEADER
+        // ========================================================
+
+        JPanel topPanel =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        topPanel.setOpaque(false);
+
+        JPanel headingPanel =
+                new JPanel();
+
+        headingPanel.setOpaque(false);
+
+        headingPanel.setLayout(
+                new javax.swing.BoxLayout(
+                        headingPanel,
+                        javax.swing.BoxLayout.Y_AXIS
+                )
+        );
+
         JLabel title =
                 new JLabel(
                         "Reports"
@@ -625,7 +661,7 @@ public class MainFrame extends JFrame {
                 new Font(
                         "Segoe UI",
                         Font.BOLD,
-                        28
+                        30
                 )
         );
 
@@ -637,38 +673,522 @@ public class MainFrame extends JFrame {
                 )
         );
 
-        page.add(
-                title,
-                BorderLayout.NORTH
-        );
-
-        JLabel message =
+        JLabel subtitle =
                 new JLabel(
-                        "Jasper Reports will be available here."
+                        "Generate and view reports for your veterinary practice"
                 );
 
-        message.setFont(
+        subtitle.setFont(
                 new Font(
                         "Segoe UI",
                         Font.PLAIN,
-                        15
+                        13
                 )
         );
 
-        message.setForeground(
+        subtitle.setForeground(
                 new Color(
-                        100,
                         110,
-                        125
+                        120,
+                        135
                 )
+        );
+
+        headingPanel.add(title);
+
+        headingPanel.add(
+                javax.swing.Box.createVerticalStrut(5)
+        );
+
+        headingPanel.add(subtitle);
+
+        JLabel reportIcon =
+                new JLabel(
+                        "REPORT CENTER"
+                );
+
+        reportIcon.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        13
+                )
+        );
+
+        reportIcon.setForeground(
+                GOLD_COLOR
+        );
+
+        topPanel.add(
+                headingPanel,
+                BorderLayout.WEST
+        );
+
+        topPanel.add(
+                reportIcon,
+                BorderLayout.EAST
         );
 
         page.add(
-                message,
+                topPanel,
+                BorderLayout.NORTH
+        );
+
+        // ========================================================
+        // CENTER
+        // ========================================================
+
+        JPanel centerPanel =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        centerPanel.setOpaque(false);
+
+        centerPanel.setBorder(
+                new EmptyBorder(
+                        30,
+                        0,
+                        0,
+                        0
+                )
+        );
+
+        // ========================================================
+        // REPORT CARD
+        // ========================================================
+
+        JPanel reportCard =
+                new JPanel(
+                        new BorderLayout(
+                                0,
+                                20
+                        )
+                );
+
+        reportCard.setBackground(
+                Color.WHITE
+        );
+
+        reportCard.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(
+                                new Color(
+                                        225,
+                                        228,
+                                        235
+                                )
+                        ),
+                        new EmptyBorder(
+                                28,
+                                30,
+                                28,
+                                30
+                        )
+                )
+        );
+
+        // ========================================================
+        // REPORT CARD HEADER
+        // ========================================================
+
+        JPanel reportHeader =
+                new JPanel(
+                        new BorderLayout()
+                );
+
+        reportHeader.setOpaque(false);
+
+        JPanel reportTitlePanel =
+                new JPanel();
+
+        reportTitlePanel.setOpaque(false);
+
+        reportTitlePanel.setLayout(
+                new javax.swing.BoxLayout(
+                        reportTitlePanel,
+                        javax.swing.BoxLayout.Y_AXIS
+                )
+        );
+
+        JLabel reportTitle =
+                new JLabel(
+                        "Appointment Report"
+                );
+
+        reportTitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        22
+                )
+        );
+
+        reportTitle.setForeground(
+                new Color(
+                        35,
+                        40,
+                        50
+                )
+        );
+
+        JLabel reportSubtitle =
+                new JLabel(
+                        "Detailed appointment information"
+                );
+
+        reportSubtitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        reportSubtitle.setForeground(
+                new Color(
+                        110,
+                        120,
+                        135
+                )
+        );
+
+        reportTitlePanel.add(
+                reportTitle
+        );
+
+        reportTitlePanel.add(
+                javax.swing.Box.createVerticalStrut(5)
+        );
+
+        reportTitlePanel.add(
+                reportSubtitle
+        );
+
+        JPanel indicator =
+                new JPanel();
+
+        indicator.setBackground(
+                GOLD_COLOR
+        );
+
+        indicator.setPreferredSize(
+                new Dimension(
+                        5,
+                        55
+                )
+        );
+
+        reportHeader.add(
+                indicator,
+                BorderLayout.WEST
+        );
+
+        reportHeader.add(
+                reportTitlePanel,
+                BorderLayout.CENTER
+        );
+
+        reportCard.add(
+                reportHeader,
+                BorderLayout.NORTH
+        );
+
+        // ========================================================
+        // REPORT INFORMATION
+        // ========================================================
+
+        JPanel informationPanel =
+                new JPanel();
+
+        informationPanel.setOpaque(false);
+
+        informationPanel.setLayout(
+                new javax.swing.BoxLayout(
+                        informationPanel,
+                        javax.swing.BoxLayout.Y_AXIS
+                )
+        );
+
+        JLabel description =
+                new JLabel(
+                        "<html>"
+                        + "View a comprehensive appointment report "
+                        + "containing information about customers, "
+                        + "pets, veterinarians, services and appointment status."
+                        + "</html>"
+                );
+
+        description.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        14
+                )
+        );
+
+        description.setForeground(
+                new Color(
+                        80,
+                        90,
+                        105
+                )
+        );
+
+        informationPanel.add(
+                description
+        );
+
+        informationPanel.add(
+                javax.swing.Box.createVerticalStrut(22)
+        );
+
+        JLabel includedTitle =
+                new JLabel(
+                        "Report includes"
+                );
+
+        includedTitle.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        14
+                )
+        );
+
+        includedTitle.setForeground(
+                new Color(
+                        35,
+                        40,
+                        50
+                )
+        );
+
+        informationPanel.add(
+                includedTitle
+        );
+
+        informationPanel.add(
+                javax.swing.Box.createVerticalStrut(10)
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Customer information"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Pet information"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Veterinarian information"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Service information"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Appointment date and time"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
+                        "Appointment status"
+                )
+        );
+
+        reportCard.add(
+                informationPanel,
+                BorderLayout.CENTER
+        );
+
+        // ========================================================
+        // BUTTON
+        // ========================================================
+
+        JPanel buttonPanel =
+                new JPanel(
+                        new FlowLayout(
+                                FlowLayout.RIGHT,
+                                0,
+                                0
+                        )
+                );
+
+        buttonPanel.setOpaque(false);
+
+        JButton btnAppointmentReport =
+                new JButton(
+                        "View Appointment Report"
+                );
+
+        btnAppointmentReport.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.BOLD,
+                        14
+                )
+        );
+
+        btnAppointmentReport.setForeground(
+                new Color(
+                        30,
+                        35,
+                        45
+                )
+        );
+
+        btnAppointmentReport.setBackground(
+                GOLD_COLOR
+        );
+
+        btnAppointmentReport.setFocusPainted(
+                false
+        );
+
+        btnAppointmentReport.setBorder(
+                new EmptyBorder(
+                        12,
+                        24,
+                        12,
+                        24
+                )
+        );
+
+        btnAppointmentReport.setCursor(
+                new java.awt.Cursor(
+                        java.awt.Cursor.HAND_CURSOR
+                )
+        );
+
+        btnAppointmentReport.addMouseListener(
+                new java.awt.event.MouseAdapter() {
+
+                    @Override
+                    public void mouseEntered(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        btnAppointmentReport.setBackground(
+                                new Color(
+                                        255,
+                                        202,
+                                        70
+                                )
+                        );
+                    }
+
+                    @Override
+                    public void mouseExited(
+                            java.awt.event.MouseEvent e
+                    ) {
+
+                        btnAppointmentReport.setBackground(
+                                GOLD_COLOR
+                        );
+                    }
+                }
+        );
+
+        // ========================================================
+        // REPORT ACTION
+        // ========================================================
+
+        btnAppointmentReport.addActionListener(
+                e -> {
+
+                    try {
+
+                        ReportService reportService =
+                                new ReportService();
+
+                        reportService.showAppointmentReport();
+
+                    } catch (Exception ex) {
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "Unable to generate appointment report.\n\n"
+                                + ex.getMessage(),
+                                "Report Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+        );
+
+        buttonPanel.add(
+                btnAppointmentReport
+        );
+
+        reportCard.add(
+                buttonPanel,
+                BorderLayout.SOUTH
+        );
+
+        centerPanel.add(
+                reportCard,
+                BorderLayout.NORTH
+        );
+
+        page.add(
+                centerPanel,
                 BorderLayout.CENTER
         );
 
         return page;
+    }
+
+    // ============================================================
+    // REPORT ITEM
+    // ============================================================
+
+    private JLabel createReportItem(
+            String text
+    ) {
+
+        JLabel item =
+                new JLabel(
+                        "  •  " + text
+                );
+
+        item.setFont(
+                new Font(
+                        "Segoe UI",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        item.setForeground(
+                new Color(
+                        90,
+                        100,
+                        115
+                )
+        );
+
+        item.setBorder(
+                new EmptyBorder(
+                        3,
+                        0,
+                        3,
+                        0
+                )
+        );
+
+        return item;
     }
 
     // ============================================================
@@ -756,9 +1276,23 @@ public class MainFrame extends JFrame {
                 BorderLayout.WEST
         );
 
+        // ========================================================
+        // DYNAMIC LOGGED-IN USER
+        // ========================================================
+
+        String userDisplay = "User";
+
+        if (Session.isLoggedIn()) {
+
+            userDisplay =
+                    Session.getCurrentUser().getFullName()
+                    + "  •  "
+                    + Session.getCurrentUser().getRole();
+        }
+
         JLabel lblUser =
                 new JLabel(
-                        "Admin  ●"
+                        userDisplay
                 );
 
         lblUser.setFont(

@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.PaymentDAO;
-import com.petcaremax.dao.PaymentDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Payment;
 
 import java.util.List;
@@ -10,9 +10,9 @@ public class PaymentService {
 
     private final PaymentDAO paymentDAO;
 
-    public PaymentService() {
-        paymentDAO = new PaymentDAOImpl();
-    }
+   public PaymentService() {
+    this.paymentDAO = DAOFactory.createPaymentDAO();
+}
 
     public boolean addPayment(Payment payment) {
 

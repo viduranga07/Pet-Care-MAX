@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.TreatmentDAO;
-import com.petcaremax.dao.TreatmentDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Treatment;
 
 import java.util.List;
@@ -11,9 +11,8 @@ public class TreatmentService {
     private final TreatmentDAO treatmentDAO;
 
     public TreatmentService() {
-        treatmentDAO = new TreatmentDAOImpl();
-    }
-
+    this.treatmentDAO = DAOFactory.createTreatmentDAO();
+}
     public boolean addTreatment(Treatment treatment) {
 
         validateTreatment(treatment);

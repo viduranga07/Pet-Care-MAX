@@ -1,8 +1,9 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.CustomerDAO;
-import com.petcaremax.dao.CustomerDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Customer;
+import com.petcaremax.exception.CustomerValidationException;
 
 import java.util.List;
 
@@ -11,15 +12,24 @@ public class CustomerService {
     private final CustomerDAO customerDAO;
 
     public CustomerService() {
-        this.customerDAO = new CustomerDAOImpl();
+        this.customerDAO = DAOFactory.createCustomerDAO();
     }
 
-    public boolean addCustomer(Customer customer) {
+    // ============================================================
+    // ADD CUSTOMER
+    // ============================================================
+
+    public boolean addCustomer(Customer customer)
+            throws CustomerValidationException {
 
         validateCustomer(customer);
 
         return customerDAO.addCustomer(customer);
     }
+
+    // ============================================================
+    // GET CUSTOMER BY ID
+    // ============================================================
 
     public Customer getCustomerById(int customerId) {
 
@@ -32,12 +42,27 @@ public class CustomerService {
         return customerDAO.getCustomerById(customerId);
     }
 
+    // ============================================================
+    // GET ALL CUSTOMERS
+    // ============================================================
+
     public List<Customer> getAllCustomers() {
 
         return customerDAO.getAllCustomers();
     }
 
-    public boolean updateCustomer(Customer customer) {
+    // ============================================================
+    // UPDATE CUSTOMER
+    // ============================================================
+
+    public boolean updateCustomer(Customer customer)
+            throws CustomerValidationException {
+
+        if (customer == null) {
+            throw new CustomerValidationException(
+                    "Customer cannot be null."
+            );
+        }
 
         if (customer.getCustomerId() <= 0) {
             throw new IllegalArgumentException(
@@ -50,6 +75,10 @@ public class CustomerService {
         return customerDAO.updateCustomer(customer);
     }
 
+    // ============================================================
+    // DELETE CUSTOMER
+    // ============================================================
+
     public boolean deleteCustomer(int customerId) {
 
         if (customerId <= 0) {
@@ -61,10 +90,16 @@ public class CustomerService {
         return customerDAO.deleteCustomer(customerId);
     }
 
-    private void validateCustomer(Customer customer) {
+    // ============================================================
+    // VALIDATE CUSTOMER
+    // USER-DEFINED EXCEPTION USED HERE
+    // ============================================================
+
+    private void validateCustomer(Customer customer)
+            throws CustomerValidationException {
 
         if (customer == null) {
-            throw new IllegalArgumentException(
+            throw new CustomerValidationException(
                     "Customer cannot be null."
             );
         }
@@ -72,7 +107,7 @@ public class CustomerService {
         if (customer.getFullName() == null ||
             customer.getFullName().isBlank()) {
 
-            throw new IllegalArgumentException(
+            throw new CustomerValidationException(
                     "Customer name is required."
             );
         }
@@ -80,7 +115,7 @@ public class CustomerService {
         if (customer.getPhone() == null ||
             customer.getPhone().isBlank()) {
 
-            throw new IllegalArgumentException(
+            throw new CustomerValidationException(
                     "Phone number is required."
             );
         }
@@ -89,7 +124,7 @@ public class CustomerService {
             !customer.getEmail().isBlank() &&
             !customer.getEmail().contains("@")) {
 
-            throw new IllegalArgumentException(
+            throw new CustomerValidationException(
                     "Please enter a valid email address."
             );
         }

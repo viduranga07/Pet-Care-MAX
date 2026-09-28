@@ -1,7 +1,7 @@
 package com.petcaremax.service;
 
 import com.petcaremax.dao.MedicationDAO;
-import com.petcaremax.dao.MedicationDAOImpl;
+import com.petcaremax.factory.DAOFactory;
 import com.petcaremax.model.Medication;
 
 import java.util.List;
@@ -10,9 +10,9 @@ public class MedicationService {
 
     private final MedicationDAO medicationDAO;
 
-    public MedicationService() {
-        medicationDAO = new MedicationDAOImpl();
-    }
+  public MedicationService() {
+    this.medicationDAO = DAOFactory.createMedicationDAO();
+}
 
     public boolean addMedication(Medication medication) {
 
