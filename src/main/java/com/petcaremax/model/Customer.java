@@ -1,0 +1,92 @@
+// This class handles one part of the PetCareMAX application.
+package com.petcaremax.model;
+
+import java.time.LocalDateTime;
+
+// This model stores the data used by this part of the application.
+public class Customer {
+
+    private int customerId;
+    private String fullName;
+    private String phone;
+    private String email;
+    private String address;
+    private LocalDateTime createdAt;
+
+    // Empty constructor
+    public Customer() {
+    }
+
+    // Constructor for creating a new customer
+    public Customer(String fullName, String phone,
+                    String email, String address) {
+
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+    }
+
+    // Constructor for retrieving a customer from database
+    public Customer(int customerId, String fullName,
+                    String phone, String email,
+                    String address, LocalDateTime createdAt) {
+
+        this.customerId = customerId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.createdAt = createdAt;
+    }
+
+    // Getters and Setters
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+}
