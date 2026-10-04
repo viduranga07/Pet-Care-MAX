@@ -64,14 +64,6 @@ The main forms use a consistent PetCareMAX visual system: light background, navy
 
 The application expects a local MySQL database named `petcare_db`. Update `DBConnection` only if the local database settings are different.
 
-## Final submission checks
 
-1. Clean and Build in NetBeans.
-2. Confirm the application starts and login works.
-3. Test CRUD and validation.
-4. Open the Jasper appointment report.
-5. Open the main `.form` files in Design View.
-6. Commit and push the final project to GitHub.
-7. Test the generated JAR and required EXE deployment.
 
-> A mark above 90 cannot be guaranteed because the final grade depends on the lecturer's practical/viva assessment. The project is organized to address the stated rubric areas as strongly as possible without inventing unsupported features.
+
