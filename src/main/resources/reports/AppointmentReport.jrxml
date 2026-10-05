@@ -101,69 +101,69 @@ ORDER BY
 	</field>
 	<background splitType="Stretch"/>
 	<title height="90" splitType="Stretch">
-		<element kind="staticText" uuid="6d4c1108-bbac-45c8-817a-8978f06d9e83" x="200" y="10" width="255" height="60" fontSize="14.0" bold="true">
+		<element kind="staticText" uuid="6d4c1108-bbac-45c8-817a-8978f06d9e83" x="0" y="8" width="555" height="70" fontName="Segoe UI" fontSize="17.0" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[PETCAREMAX
 APPOINTMENT REPORT]]></text>
 		</element>
 	</title>
 	<pageHeader height="35" splitType="Stretch"/>
 	<columnHeader height="69" splitType="Stretch">
-		<element kind="staticText" uuid="21694989-8110-425d-bc69-2fae28c43c31" x="0" y="15" width="40" height="30">
+		<element kind="staticText" uuid="21694989-8110-425d-bc69-2fae28c43c31" x="0" y="15" width="40" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[ID]]></text>
 		</element>
-		<element kind="staticText" uuid="87db9a35-1741-4f96-96ae-d17683c4cd1e" x="40" y="15" width="80" height="30">
+		<element kind="staticText" uuid="87db9a35-1741-4f96-96ae-d17683c4cd1e" x="40" y="15" width="80" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Customer]]></text>
 		</element>
-		<element kind="staticText" uuid="483c5fa7-1955-44c8-9283-7278ce609e99" x="120" y="15" width="60" height="30">
+		<element kind="staticText" uuid="483c5fa7-1955-44c8-9283-7278ce609e99" x="120" y="15" width="60" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Pet]]></text>
 		</element>
-		<element kind="staticText" uuid="c762485b-63d3-4bd8-a53b-a9151cc4a4c1" x="180" y="15" width="70" height="30">
+		<element kind="staticText" uuid="c762485b-63d3-4bd8-a53b-a9151cc4a4c1" x="180" y="15" width="70" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Species]]></text>
 		</element>
-		<element kind="staticText" uuid="1dc928f5-dbe7-4fda-9f13-5731ced39a29" x="250" y="15" width="70" height="30">
+		<element kind="staticText" uuid="1dc928f5-dbe7-4fda-9f13-5731ced39a29" x="250" y="15" width="70" height="30" fontName="Segoe UI" fontSize="8.0" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Veterinarian]]></text>
 		</element>
-		<element kind="staticText" uuid="e79e05a1-26c2-4b07-97e7-a611b8713dd1" x="320" y="15" width="70" height="30">
+		<element kind="staticText" uuid="e79e05a1-26c2-4b07-97e7-a611b8713dd1" x="320" y="15" width="70" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Service]]></text>
 		</element>
-		<element kind="staticText" uuid="7dd6b56c-b817-4c03-93ff-dd14e03bf8d1" x="390" y="15" width="80" height="30">
+		<element kind="staticText" uuid="7dd6b56c-b817-4c03-93ff-dd14e03bf8d1" x="390" y="15" width="80" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Date]]></text>
 		</element>
-		<element kind="staticText" uuid="bb517ea7-4a81-464c-8454-60c6e626fa15" x="470" y="15" width="80" height="30">
+		<element kind="staticText" uuid="bb517ea7-4a81-464c-8454-60c6e626fa15" x="470" y="15" width="80" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Status]]></text>
 		</element>
 	</columnHeader>
 	<detail>
-		<band height="131" splitType="Stretch">
-			<element kind="textField" uuid="db4da829-b733-49d5-a297-f55643611945" x="0" y="0" width="40" height="30">
+		<band height="38" splitType="Stretch">
+			<element kind="textField" uuid="db4da829-b733-49d5-a297-f55643611945" x="0" y="3" width="40" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#1E2736" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{appointment_id}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b2896b-b531-447f-b9e1-522a2c5186bd"/>
 			</element>
-			<element kind="textField" uuid="761c2b10-2cfc-418d-805b-adb3cf4a5ddd" x="40" y="0" width="80" height="30">
+			<element kind="textField" uuid="761c2b10-2cfc-418d-805b-adb3cf4a5ddd" x="40" y="3" width="80" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{customer_name}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3df9feb8-ac47-496e-9457-c40be1e284f6"/>
 			</element>
-			<element kind="textField" uuid="fc7efbbb-ba9a-468b-ad21-f2510c65e369" x="120" y="0" width="60" height="30">
+			<element kind="textField" uuid="fc7efbbb-ba9a-468b-ad21-f2510c65e369" x="120" y="3" width="60" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{pet_name}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7400ba6-7cc6-4319-8b12-1960af1ef801"/>
 			</element>
-			<element kind="textField" uuid="a799b361-65af-4199-8304-35133c874e85" x="180" y="0" width="70" height="30">
+			<element kind="textField" uuid="a799b361-65af-4199-8304-35133c874e85" x="180" y="3" width="70" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{species}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bf3519f-151a-4b6f-ba79-6c8b7ad20849"/>
 			</element>
-			<element kind="textField" uuid="f999d8bf-337a-42d4-b388-61e34976738d" x="250" y="0" width="70" height="30">
+			<element kind="textField" uuid="f999d8bf-337a-42d4-b388-61e34976738d" x="250" y="3" width="70" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{veterinarian_name}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c78adbaa-dc29-4927-848e-1208cae63046"/>
 			</element>
-			<element kind="textField" uuid="822c4a3a-89dc-44cb-89b3-6867349813bc" x="320" y="0" width="70" height="30">
+			<element kind="textField" uuid="822c4a3a-89dc-44cb-89b3-6867349813bc" x="320" y="3" width="70" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{service_name}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9caf8b5a-f292-4296-87a0-d265b04bc414"/>
 			</element>
-			<element kind="textField" uuid="787960de-bb3a-4dcf-87c4-f945e60ab894" x="390" y="0" width="80" height="30">
+			<element kind="textField" uuid="787960de-bb3a-4dcf-87c4-f945e60ab894" x="390" y="3" width="80" height="32" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
 				<expression><![CDATA[$F{appointment_date}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42696f39-f347-4e95-8720-ea053feeba75"/>
 			</element>
-			<element kind="textField" uuid="65ed68b5-1e14-4551-8dd5-44daa9a47177" x="470" y="0" width="80" height="30">
+			<element kind="textField" uuid="65ed68b5-1e14-4551-8dd5-44daa9a47177" x="470" y="3" width="80" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#1E2736" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{status}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c796f9e2-7b2a-4acc-8e03-36656fb4142e"/>
 			</element>

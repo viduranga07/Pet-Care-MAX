@@ -1,7 +1,7 @@
 // This class handles one part of the PetCareMAX application.
 package com.petcaremax.view;
 
-import com.petcaremax.service.ReportService;
+import com.petcaremax.controller.ReportsPanelController;
 import com.petcaremax.util.Session;
 import com.petcaremax.util.PetCareIcons;
 
@@ -16,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -280,39 +279,57 @@ public class MainFrame extends JFrame {
 
         btnDashboard =
                 createMenuButton("Dashboard");
-        btnDashboard.setIcon(PetCareIcons.dashboard());
+        btnDashboard.setIcon(
+                PetCareIcons.dashboard()
+        );
 
         btnAddUser =
                 createMenuButton("Add User");
-        btnAddUser.setIcon(PetCareIcons.userAdd());
+        btnAddUser.setIcon(
+                PetCareIcons.userAdd()
+        );
 
         btnCustomers =
                 createMenuButton("Customers");
-        btnCustomers.setIcon(PetCareIcons.customers());
+        btnCustomers.setIcon(
+                PetCareIcons.customers()
+        );
 
         btnPets =
                 createMenuButton("Pets");
-        btnPets.setIcon(PetCareIcons.pets());
+        btnPets.setIcon(
+                PetCareIcons.pets()
+        );
 
         btnVeterinarians =
                 createMenuButton("Veterinarians");
-        btnVeterinarians.setIcon(PetCareIcons.veterinarians());
+        btnVeterinarians.setIcon(
+                PetCareIcons.veterinarians()
+        );
 
         btnServices =
                 createMenuButton("Services");
-        btnServices.setIcon(PetCareIcons.services());
+        btnServices.setIcon(
+                PetCareIcons.services()
+        );
 
         btnMedications =
                 createMenuButton("Medications");
-        btnMedications.setIcon(PetCareIcons.medications());
+        btnMedications.setIcon(
+                PetCareIcons.medications()
+        );
 
         btnAppointments =
                 createMenuButton("Appointments");
-        btnAppointments.setIcon(PetCareIcons.appointments());
+        btnAppointments.setIcon(
+                PetCareIcons.appointments()
+        );
 
         btnTreatments =
                 createMenuButton("Treatments");
-        btnTreatments.setIcon(PetCareIcons.treatments());
+        btnTreatments.setIcon(
+                PetCareIcons.treatments()
+        );
 
         btnTreatmentMedications =
                 createMenuButton("Treatment Medications");
@@ -322,59 +339,63 @@ public class MainFrame extends JFrame {
 
         btnPayments =
                 createMenuButton("Payments");
-        btnPayments.setIcon(PetCareIcons.payments());
+        btnPayments.setIcon(
+                PetCareIcons.payments()
+        );
 
         btnReports =
                 createMenuButton("Reports");
-        btnReports.setIcon(PetCareIcons.reports());
+        btnReports.setIcon(
+                PetCareIcons.reports()
+        );
 
-     String role = "";
+        String role = "";
 
-if (Session.isLoggedIn()) {
-    role = Session.getCurrentUser().getRole();
-}
+        if (Session.isLoggedIn()) {
+            role =
+                    Session.getCurrentUser().getRole();
+        }
 
-// ADMIN
+        // ADMIN
 
-if (role.equalsIgnoreCase("Admin")) {
+        if (role.equalsIgnoreCase("Admin")) {
 
-    navigationPanel.add(btnDashboard);
-    navigationPanel.add(btnAddUser);
-    navigationPanel.add(btnCustomers);
-    navigationPanel.add(btnPets);
-    navigationPanel.add(btnVeterinarians);
-    navigationPanel.add(btnServices);
-    navigationPanel.add(btnMedications);
-    navigationPanel.add(btnAppointments);
-    navigationPanel.add(btnTreatments);
-    navigationPanel.add(btnTreatmentMedications);
-    navigationPanel.add(btnPayments);
-    navigationPanel.add(btnReports);
-}
+            navigationPanel.add(btnDashboard);
+            navigationPanel.add(btnAddUser);
+            navigationPanel.add(btnCustomers);
+            navigationPanel.add(btnPets);
+            navigationPanel.add(btnVeterinarians);
+            navigationPanel.add(btnServices);
+            navigationPanel.add(btnMedications);
+            navigationPanel.add(btnAppointments);
+            navigationPanel.add(btnTreatments);
+            navigationPanel.add(btnTreatmentMedications);
+            navigationPanel.add(btnPayments);
+            navigationPanel.add(btnReports);
+        }
 
-// RECEPTIONIST
+        // RECEPTIONIST
 
-else if (role.equalsIgnoreCase("Receptionist")) {
+        else if (role.equalsIgnoreCase("Receptionist")) {
 
-    navigationPanel.add(btnDashboard);
-    navigationPanel.add(btnCustomers);
-    navigationPanel.add(btnPets);
-    navigationPanel.add(btnAppointments);
-    navigationPanel.add(btnPayments);
-}
+            navigationPanel.add(btnDashboard);
+            navigationPanel.add(btnCustomers);
+            navigationPanel.add(btnPets);
+            navigationPanel.add(btnAppointments);
+            navigationPanel.add(btnPayments);
+        }
 
-// VETERINARIAN
+        // VETERINARIAN
 
-else if (role.equalsIgnoreCase("Veterinarian")) {
+        else if (role.equalsIgnoreCase("Veterinarian")) {
 
-    navigationPanel.add(btnDashboard);
-    navigationPanel.add(btnPets);
-    navigationPanel.add(btnAppointments);
-    navigationPanel.add(btnTreatments);
-    navigationPanel.add(btnTreatmentMedications);
+            navigationPanel.add(btnDashboard);
+            navigationPanel.add(btnPets);
+            navigationPanel.add(btnAppointments);
+            navigationPanel.add(btnTreatments);
+            navigationPanel.add(btnTreatmentMedications);
+        }
 
-
-}
         // BUTTON ACTIONS
 
         btnDashboard.addActionListener(
@@ -450,31 +471,31 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         btnLogout =
                 createMenuButton("Logout");
-        btnLogout.setIcon(PetCareIcons.logout());
+
+        btnLogout.setIcon(
+                PetCareIcons.logout()
+        );
 
         btnLogout.addActionListener(
                 e -> {
 
                     int result =
-                            JOptionPane.showConfirmDialog(
+                            javax.swing.JOptionPane.showConfirmDialog(
                                     this,
                                     "Are you sure you want to logout?",
                                     "Logout",
-                                    JOptionPane.YES_NO_OPTION
+                                    javax.swing.JOptionPane.YES_NO_OPTION
                             );
 
                     if (
                             result ==
-                            JOptionPane.YES_OPTION
+                            javax.swing.JOptionPane.YES_OPTION
                     ) {
 
-                        // Clear logged-in user
                         Session.logout();
 
-                        // Close MainFrame
                         dispose();
 
-                        // Open LoginForm
                         LoginForm loginForm =
                                 new LoginForm();
 
@@ -507,13 +528,15 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 CONTENT_COLOR
         );
 
-        // Header
+        // HEADER
+
         contentPanel.add(
                 createHeader(),
                 BorderLayout.NORTH
         );
 
-        // CardLayout
+        // CARD LAYOUT
+
         cardLayout =
                 new CardLayout();
 
@@ -866,7 +889,7 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         JLabel reportTitle =
                 new JLabel(
-                        "Appointment Report"
+                        "Veterinary Reports"
                 );
 
         reportTitle.setFont(
@@ -887,7 +910,7 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         JLabel reportSubtitle =
                 new JLabel(
-                        "Detailed appointment information"
+                        "Generate detailed reports from the PetCareMAX database"
                 );
 
         reportSubtitle.setFont(
@@ -964,9 +987,8 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
         JLabel description =
                 new JLabel(
                         "<html>"
-                        + "View a comprehensive appointment report "
-                        + "containing information about customers, "
-                        + "pets, veterinarians, services and appointment status."
+                        + "Select a report below to generate detailed "
+                        + "information from the PetCareMAX database."
                         + "</html>"
                 );
 
@@ -996,7 +1018,7 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         JLabel includedTitle =
                 new JLabel(
-                        "Report includes"
+                        "Available Reports"
                 );
 
         includedTitle.setFont(
@@ -1025,6 +1047,12 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         informationPanel.add(
                 createReportItem(
+                        "Appointment information"
+                )
+        );
+
+        informationPanel.add(
+                createReportItem(
                         "Customer information"
                 )
         );
@@ -1049,13 +1077,13 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         informationPanel.add(
                 createReportItem(
-                        "Appointment date and time"
+                        "Payment information"
                 )
         );
 
         informationPanel.add(
                 createReportItem(
-                        "Appointment status"
+                        "Payment amount and status"
                 )
         );
 
@@ -1064,13 +1092,13 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 BorderLayout.CENTER
         );
 
-        // BUTTON
+        // REPORT BUTTONS
 
         JPanel buttonPanel =
                 new JPanel(
                         new FlowLayout(
                                 FlowLayout.RIGHT,
-                                0,
+                                12,
                                 0
                         )
                 );
@@ -1082,7 +1110,72 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                         "View Appointment Report"
                 );
 
-        btnAppointmentReport.setFont(
+        JButton btnPaymentReport =
+                new JButton(
+                        "View Payment Report"
+                );
+
+        styleReportButton(
+                btnAppointmentReport
+        );
+
+        styleReportButton(
+                btnPaymentReport
+        );
+
+        buttonPanel.add(
+                btnAppointmentReport
+        );
+
+        buttonPanel.add(
+                btnPaymentReport
+        );
+
+        reportCard.add(
+                buttonPanel,
+                BorderLayout.SOUTH
+        );
+
+        /*
+         * IMPORTANT:
+         *
+         * The MainFrame does NOT handle report actions.
+         * ReportsPanelController is responsible for
+         * handling both report buttons.
+         */
+
+        ReportsPanelController reportController =
+                new ReportsPanelController(
+                        btnAppointmentReport,
+                        btnPaymentReport,
+                        this
+                );
+
+        // Prevent unused variable warning in some IDEs.
+        if (reportController == null) {
+            return page;
+        }
+
+        centerPanel.add(
+                reportCard,
+                BorderLayout.NORTH
+        );
+
+        page.add(
+                centerPanel,
+                BorderLayout.CENTER
+        );
+
+        return page;
+    }
+
+    // REPORT BUTTON STYLE
+
+    private void styleReportButton(
+            JButton button
+    ) {
+
+        button.setFont(
                 new Font(
                         "Segoe UI",
                         Font.BOLD,
@@ -1090,7 +1183,7 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 )
         );
 
-        btnAppointmentReport.setForeground(
+        button.setForeground(
                 new Color(
                         30,
                         35,
@@ -1098,15 +1191,13 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 )
         );
 
-        btnAppointmentReport.setBackground(
+        button.setBackground(
                 GOLD_COLOR
         );
 
-        btnAppointmentReport.setFocusPainted(
-                false
-        );
+        button.setFocusPainted(false);
 
-        btnAppointmentReport.setBorder(
+        button.setBorder(
                 new EmptyBorder(
                         12,
                         24,
@@ -1115,13 +1206,13 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 )
         );
 
-        btnAppointmentReport.setCursor(
+        button.setCursor(
                 new java.awt.Cursor(
                         java.awt.Cursor.HAND_CURSOR
                 )
         );
 
-        btnAppointmentReport.addMouseListener(
+        button.addMouseListener(
                 new java.awt.event.MouseAdapter() {
 
                     @Override
@@ -1129,7 +1220,7 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                             java.awt.event.MouseEvent e
                     ) {
 
-                        btnAppointmentReport.setBackground(
+                        button.setBackground(
                                 new Color(
                                         255,
                                         202,
@@ -1143,58 +1234,12 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                             java.awt.event.MouseEvent e
                     ) {
 
-                        btnAppointmentReport.setBackground(
+                        button.setBackground(
                                 GOLD_COLOR
                         );
                     }
                 }
         );
-
-        // REPORT ACTION
-
-        btnAppointmentReport.addActionListener(
-                e -> {
-
-                    try {
-
-                        ReportService reportService =
-                                new ReportService();
-
-                        reportService.showAppointmentReport();
-
-                    } catch (Exception ex) {
-
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "Unable to generate appointment report.\n\n"
-                                + ex.getMessage(),
-                                "Report Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
-                    }
-                }
-        );
-
-        buttonPanel.add(
-                btnAppointmentReport
-        );
-
-        reportCard.add(
-                buttonPanel,
-                BorderLayout.SOUTH
-        );
-
-        centerPanel.add(
-                reportCard,
-                BorderLayout.NORTH
-        );
-
-        page.add(
-                centerPanel,
-                BorderLayout.CENTER
-        );
-
-        return page;
     }
 
     // REPORT ITEM
@@ -1321,7 +1366,8 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
 
         // DYNAMIC LOGGED-IN USER
 
-        String userDisplay = "User";
+        String userDisplay =
+                "User";
 
         if (Session.isLoggedIn()) {
 
@@ -1603,14 +1649,17 @@ else if (role.equalsIgnoreCase("Veterinarian")) {
                 Color.WHITE
         );
     }
-    private boolean hasRole(String role) {
 
-    if (!Session.isLoggedIn()) {
-        return false;
+    private boolean hasRole(
+            String role
+    ) {
+
+        if (!Session.isLoggedIn()) {
+            return false;
+        }
+
+        return role.equalsIgnoreCase(
+                Session.getCurrentUser().getRole()
+        );
     }
-
-    return role.equalsIgnoreCase(
-            Session.getCurrentUser().getRole()
-    );
-}
 }

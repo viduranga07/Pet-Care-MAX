@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio 7.0.3 compatible JRXML -->
+<jasperReport name="PaymentReport" language="java" pageWidth="842" pageHeight="595" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="25" bottomMargin="25" uuid="7a3a8f9b-7d7d-4e39-9e1d-8b5a8c0a1001">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="PetCareMAX MySQL"/>
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+
+    <query language="sql"><![CDATA[
+SELECT
+    p.payment_id AS payment_id,
+    c.full_name AS customer_name,
+    pt.pet_name AS pet_name,
+    a.appointment_date AS appointment_date,
+    a.appointment_time AS appointment_time,
+    p.amount AS amount,
+    p.payment_method AS payment_method,
+    p.payment_date AS payment_date,
+    p.status AS payment_status
+FROM payments p
+INNER JOIN appointments a
+    ON p.appointment_id = a.appointment_id
+INNER JOIN pets pt
+    ON a.pet_id = pt.pet_id
+INNER JOIN customers c
+    ON pt.customer_id = c.customer_id
+ORDER BY p.payment_date DESC
+    ]]></query>
+
+    <field name="payment_id" class="java.lang.Integer"/>
+    <field name="customer_name" class="java.lang.String"/>
+    <field name="pet_name" class="java.lang.String"/>
+    <field name="appointment_date" class="java.sql.Date"/>
+    <field name="appointment_time" class="java.sql.Time"/>
+    <field name="amount" class="java.math.BigDecimal"/>
+    <field name="payment_method" class="java.lang.String"/>
+    <field name="payment_date" class="java.sql.Timestamp"/>
+    <field name="payment_status" class="java.lang.String"/>
+
+    <background splitType="Stretch"/>
+
+    <title height="75" splitType="Stretch">
+        <element kind="staticText" uuid="10000000-0000-0000-0000-000000000001" x="0" y="5" width="782" height="65"
+                 fontName="Segoe UI" fontSize="18.0" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[PETCAREMAX
+PAYMENT REPORT]]></text>
+        </element>
+    </title>
+
+    <pageHeader height="15" splitType="Stretch"/>
+
+    <columnHeader height="38" splitType="Stretch">
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000001" x="0" y="0" width="45" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[ID]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000002" x="45" y="0" width="115" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Customer]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000003" x="160" y="0" width="85" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Pet]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000004" x="245" y="0" width="90" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Appointment]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000005" x="335" y="0" width="80" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Amount]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000006" x="415" y="0" width="95" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Method]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000007" x="510" y="0" width="145" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Payment Date]]></text>
+        </element>
+        <element kind="staticText" uuid="20000000-0000-0000-0000-000000000008" x="655" y="0" width="127" height="32" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#FFFFFF" backcolor="#1E2736" mode="Opaque" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Status]]></text>
+        </element>
+    </columnHeader>
+
+    <detail>
+        <band height="36" splitType="Stretch">
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000001" x="0" y="2" width="45" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#1E2736" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{payment_id}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000002" x="45" y="2" width="115" height="30" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
+                <expression><![CDATA[$F{customer_name}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000003" x="160" y="2" width="85" height="30" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" vTextAlign="Middle">
+                <expression><![CDATA[$F{pet_name}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000004" x="245" y="2" width="90" height="30" fontName="Segoe UI" fontSize="8.5" forecolor="#6E7887" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{appointment_date}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000005" x="335" y="2" width="80" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#1E2736" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{amount}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000006" x="415" y="2" width="95" height="30" fontName="Segoe UI" fontSize="8.5" forecolor="#232832" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{payment_method}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000007" x="510" y="2" width="145" height="30" fontName="Segoe UI" fontSize="8.5" forecolor="#6E7887" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{payment_date}]]></expression>
+            </element>
+            <element kind="textField" uuid="30000000-0000-0000-0000-000000000008" x="655" y="2" width="127" height="30" fontName="Segoe UI" fontSize="8.5" bold="true" forecolor="#1E2736" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{payment_status}]]></expression>
+            </element>
+        </band>
+    </detail>
+
+    <columnFooter height="15" splitType="Stretch"/>
+
+    <pageFooter height="35" splitType="Stretch">
+        <element kind="staticText" uuid="40000000-0000-0000-0000-000000000001" x="0" y="5" width="300" height="20" fontName="Segoe UI" fontSize="8.0" forecolor="#6E7887" vTextAlign="Middle">
+            <text><![CDATA[Generated by PetCareMAX]]></text>
+        </element>
+        <element kind="textField" uuid="40000000-0000-0000-0000-000000000002" x="650" y="5" width="132" height="20" fontName="Segoe UI" fontSize="8.0" forecolor="#6E7887" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+    </pageFooter>
+
+    <summary height="10" splitType="Stretch"/>
+</jasperReport>

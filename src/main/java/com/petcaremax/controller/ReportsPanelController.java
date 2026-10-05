@@ -1,33 +1,90 @@
-// This class handles one part of the PetCareMAX application.
 package com.petcaremax.controller;
 
 import com.petcaremax.service.ReportService;
-import com.petcaremax.view.ReportsPanel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-// This controller handles report button actions for the report screen.
 public class ReportsPanelController implements ActionListener {
 
-    private final ReportsPanel view;
+    private final JButton appointmentReportButton;
+    private final JButton paymentReportButton;
+    private final JFrame parentView;
+
     private final ReportService reportService;
 
-    public ReportsPanelController(ReportsPanel view) {
-        this.view = view;
-        this.reportService = new ReportService();
-        view.getReportsButton().addActionListener(this);
+    public ReportsPanelController(
+            JButton appointmentReportButton,
+            JButton paymentReportButton,
+            JFrame parentView
+    ) {
+
+        this.appointmentReportButton =
+                appointmentReportButton;
+
+        this.paymentReportButton =
+                paymentReportButton;
+
+        this.parentView =
+                parentView;
+
+        this.reportService =
+                new ReportService();
+
+        appointmentReportButton.addActionListener(this);
+        paymentReportButton.addActionListener(this);
     }
 
     @Override
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == view.getReportsButton()) {
+    public void actionPerformed(
+            ActionEvent event
+    ) {
+
+        // APPOINTMENT REPORT
+
+        if (
+                event.getSource() ==
+                appointmentReportButton
+        ) {
+
             try {
+
                 reportService.showAppointmentReport();
+
             } catch (Exception ex) {
+
                 JOptionPane.showMessageDialog(
-                        view,
-                        "Unable to generate appointment report.\n\n" + ex.getMessage(),
+                        parentView,
+                        "Unable to generate appointment report.\n\n"
+                        + ex.getMessage(),
+                        "Report Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+        }
+
+        // PAYMENT REPORT
+
+        else if (
+                event.getSource() ==
+                paymentReportButton
+        ) {
+
+            try {
+
+                reportService.showPaymentReport();
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(
+                        parentView,
+                        "Unable to generate payment report.\n\n"
+                        + ex.getMessage(),
                         "Report Error",
                         JOptionPane.ERROR_MESSAGE
                 );

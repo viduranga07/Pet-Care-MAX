@@ -1,6 +1,7 @@
 // This class handles one part of the PetCareMAX application.
 package com.petcaremax.controller;
 
+import com.petcaremax.exception.PetValidationException;
 import com.petcaremax.model.Pet;
 import com.petcaremax.service.PetService;
 
@@ -15,17 +16,17 @@ public class PetController {
         petService = new PetService();
     }
 
-    public boolean addPet(Pet pet) {
+    public boolean addPet(Pet pet) throws PetValidationException {
 
         return petService.addPet(pet);
     }
 
-    public boolean updatePet(Pet pet) {
+    public boolean updatePet(Pet pet) throws PetValidationException {
 
         return petService.updatePet(pet);
     }
 
-    public boolean deletePet(int petId) {
+    public boolean deletePet(int petId) throws PetValidationException {
 
         return petService.deletePet(petId);
     }

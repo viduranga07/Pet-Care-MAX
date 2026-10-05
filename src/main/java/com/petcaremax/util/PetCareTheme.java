@@ -464,14 +464,68 @@ public final class PetCareTheme {
                         )
                 );
 
+                // Use a painted triangle instead of a Unicode arrow glyph.
+                // This prevents the arrow from appearing as a square on systems
+                // where the selected font does not contain the glyph.
                 combo.setUI(new BasicComboBoxUI() {
 
                     @Override
                     protected JButton createArrowButton() {
-                        JButton arrow = new JButton("▾");
-                        arrow.setFont(
-                                new Font("Segoe UI", Font.BOLD, 15)
-                        );
+
+                        Icon arrowIcon = new Icon() {
+
+                            @Override
+                            public int getIconWidth() {
+                                return 12;
+                            }
+
+                            @Override
+                            public int getIconHeight() {
+                                return 8;
+                            }
+
+                            @Override
+                            public void paintIcon(
+                                    Component c,
+                                    Graphics g,
+                                    int x,
+                                    int y) {
+
+                                Graphics2D g2 =
+                                        (Graphics2D) g.create();
+
+                                g2.setRenderingHint(
+                                        RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON
+                                );
+
+                                g2.setColor(NAVY_LIGHT);
+
+                                int centerX = x + 6;
+                                int topY = y + 1;
+
+                                Polygon triangle = new Polygon(
+                                        new int[]{
+                                            centerX - 5,
+                                            centerX + 5,
+                                            centerX
+                                        },
+                                        new int[]{
+                                            topY,
+                                            topY,
+                                            topY + 5
+                                        },
+                                        3
+                                );
+
+                                g2.fillPolygon(triangle);
+                                g2.dispose();
+                            }
+                        };
+
+                        JButton arrow =
+                                new JButton(arrowIcon);
+
                         arrow.setBorder(
                                 BorderFactory.createEmptyBorder(
                                         0, 8, 0, 8
@@ -480,10 +534,10 @@ public final class PetCareTheme {
                         arrow.setFocusPainted(false);
                         arrow.setContentAreaFilled(false);
                         arrow.setOpaque(false);
-                        arrow.setForeground(NAVY_LIGHT);
                         arrow.setCursor(
                                 new Cursor(Cursor.HAND_CURSOR)
                         );
+
                         return arrow;
                     }
                 });

@@ -7,6 +7,7 @@ package com.petcaremax.view;
 import com.petcaremax.controller.PetFormController;
 import com.petcaremax.controller.CustomerController;
 import com.petcaremax.controller.PetController;
+import com.petcaremax.exception.PetValidationException;
 import com.petcaremax.model.Customer;
 import com.petcaremax.model.Pet;
 import com.petcaremax.util.PetCareTheme;
@@ -412,6 +413,15 @@ try {
                 );
             }
 
+        } catch (PetValidationException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Pet Validation Error",
+                    JOptionPane.WARNING_MESSAGE
+            );
+
         } catch (IllegalArgumentException e) {
 
             JOptionPane.showMessageDialog(
@@ -629,6 +639,15 @@ try {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+
+        } catch (PetValidationException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Pet Validation Error",
+                    JOptionPane.WARNING_MESSAGE
+            );
 
         } catch (IllegalArgumentException e) {
 
@@ -1054,7 +1073,7 @@ try {
                 () -> new PetForm().setVisible(true)
         );
     
-    }//GEN-LAST:event_cmbOwnerActionPerformed
+    }                                        
 
     public void clearPet() {
         // Button actions are handled by the form controller.
@@ -1134,6 +1153,15 @@ try {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+
+        } catch (PetValidationException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Pet Validation Error",
+                    JOptionPane.WARNING_MESSAGE
+            );
 
         } catch (IllegalArgumentException e) {
 

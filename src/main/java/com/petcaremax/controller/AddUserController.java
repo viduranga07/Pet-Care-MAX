@@ -1,6 +1,7 @@
 // This class handles one part of the PetCareMAX application.
 package com.petcaremax.controller;
 
+import com.petcaremax.exception.UserValidationException;
 import com.petcaremax.model.User;
 import com.petcaremax.service.AddUserService;
 import com.petcaremax.util.Password;
@@ -36,64 +37,105 @@ public class AddUserController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
+
         if (event.getSource() == view.getBtnCreateUser()) {
             createUser();
+
         } else if (event.getSource() == view.getBtnClear()) {
             view.clearForm();
         }
     }
 
     private void createUser() {
+
         String fullName = view.getTxtFullName().getText().trim();
         String username = view.getTxtUsername().getText().trim();
         char[] passwordChars = view.getTxtPassword().getPassword();
-        String role = String.valueOf(view.getCmbRole().getSelectedItem());
-        String status = String.valueOf(view.getCmbStatus().getSelectedItem());
+
+        String role = String.valueOf(
+                view.getCmbRole().getSelectedItem()
+        );
+
+        String status = String.valueOf(
+                view.getCmbStatus().getSelectedItem()
+        );
 
         try {
+
+            // Controller-level input validation
             validateInput(fullName, username, passwordChars);
 
+            // Check whether username already exists
             if (addUserService.usernameExists(username)) {
+
                 showWarning(
-                        "This username already exists.\nPlease choose another username.",
+                        "This username already exists.\n"
+                        + "Please choose another username.",
                         "Duplicate Username"
                 );
+
                 view.getTxtUsername().requestFocus();
                 return;
             }
 
+            // Hash password before storing it
             String passwordHash = Password.hashPassword(
                     new String(passwordChars)
             );
 
+            // Create User object
             User user = new User();
+
             user.setFullName(fullName);
             user.setUsername(username);
             user.setPasswordHash(passwordHash);
             user.setRole(role);
             user.setStatus(status);
 
+            // Service-level validation and database operation
             boolean created = addUserService.createUser(user);
 
             if (created) {
+
                 JOptionPane.showMessageDialog(
                         view,
                         "User account created successfully.",
                         "User Created",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
                 view.clearForm();
+
             } else {
+
                 JOptionPane.showMessageDialog(
                         view,
-                        "The user could not be created. Please check the database connection and try again.",
+                        "The user could not be created. "
+                        + "Please check the database connection and try again.",
                         "Create User Failed",
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+
+        } catch (UserValidationException ex) {
+
+            // Custom user-defined exception from service layer
+            showWarning(
+                    ex.getMessage(),
+                    "User Validation Error"
+            );
+
         } catch (IllegalArgumentException ex) {
-            showWarning(ex.getMessage(), "Validation Error");
+
+            // Controller-level validation error
+            showWarning(
+                    ex.getMessage(),
+                    "Validation Error"
+            );
+
         } catch (Exception ex) {
+
+            // Unexpected system/database error
             JOptionPane.showMessageDialog(
                     view,
                     "An unexpected error occurred while creating the user.\n"
@@ -101,7 +143,10 @@ public class AddUserController implements ActionListener {
                     "System Error",
                     JOptionPane.ERROR_MESSAGE
             );
+
         } finally {
+
+            // Clear password from memory
             Arrays.fill(passwordChars, '\0');
         }
     }
@@ -111,37 +156,58 @@ public class AddUserController implements ActionListener {
             String username,
             char[] password
     ) {
+
         if (fullName.isEmpty()) {
+
             view.getTxtFullName().requestFocus();
-            throw new IllegalArgumentException("Full name is required.");
+
+            throw new IllegalArgumentException(
+                    "Full name is required."
+            );
         }
 
         if (username.isEmpty()) {
+
             view.getTxtUsername().requestFocus();
-            throw new IllegalArgumentException("Username is required.");
+
+            throw new IllegalArgumentException(
+                    "Username is required."
+            );
         }
 
         if (username.length() < 3) {
+
             view.getTxtUsername().requestFocus();
+
             throw new IllegalArgumentException(
                     "Username must contain at least 3 characters."
             );
         }
 
         if (password.length == 0) {
+
             view.getTxtPassword().requestFocus();
-            throw new IllegalArgumentException("Password is required.");
+
+            throw new IllegalArgumentException(
+                    "Password is required."
+            );
         }
 
         if (password.length < 6) {
+
             view.getTxtPassword().requestFocus();
+
             throw new IllegalArgumentException(
                     "Password must contain at least 6 characters."
             );
         }
     }
 
-    private void showWarning(String message, String title) {
+    private void showWarning(
+            String message,
+            String title
+    ) {
+
         JOptionPane.showMessageDialog(
                 view,
                 message,
